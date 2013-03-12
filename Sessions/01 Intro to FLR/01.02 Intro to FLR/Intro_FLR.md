@@ -4,8 +4,6 @@
 
 # What does FLR mean?
 
-![](graphics/FLR.png)
-
 Maybe __F__isheries __L__ibrary in __R__
 
 # Why, oh why?

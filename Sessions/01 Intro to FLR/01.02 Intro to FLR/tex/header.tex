@@ -2,27 +2,32 @@
 % Iago Mosqueira - JRC. 2012
 %
 
-% gets rid of navigation symbols
+%% gets rid of navigation symbols
 \setbeamertemplate{navigation symbols}{}
 
-% colors
+%% colors
 \definecolor{drk-blue}{RGB}{0, 51, 102} % blue text
 \definecolor{jrc-blue}{RGB}{0, 184, 252} % blue header
 
-\setbeamercolor{shadedhead}{bg=jrc-blue}
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{structure}{fg=drk-blue} 
 
+%% Images
 % footer image
 \pgfdeclareimage[height=5.5mm]{footimage}{tex/footer}
 
 % header image
-\pgfdeclareimage[height=1.5cm]{headimage}{tex/header}
+\pgfdeclareimage[width=0.1575\paperwidth]{headimage}{tex/header}
+
+% title page image
+\pgfdeclareimage[width=0.6\textwidth]{titlegraphic}{graphics/front}
 
 %% footline
 %% left: date as in title
 \newcommand{\footlinetext}{\insertdate}
 \setbeamertemplate{footline}{
 \begin{minipage}{58mm}
- \color{drk-blue} \hspace{7.5mm} \footlinetext
+\hspace{7.5mm} \footlinetext
 \end{minipage}
 \hspace{0.1mm}
 %% center: jrc logo
@@ -32,28 +37,69 @@
 \hspace{0.1mm}
 %% right: page number
 \begin{minipage}{50mm}
- \color{drk-blue} 
  \flushright \insertframenumber
 \end{minipage}
 }
 
+
 %% headline
+\setbeamercolor{shadedhead}{bg=jrc-blue}
+
 \setbeamertemplate{headline}{
 \leavevmode\hbox{%
-% uniform
-\begin{beamercolorbox}[wd=\textwidth,ht=0.13\paperheight,dp=0ex]{shadedhead}%
-	% EC logo
+%% uniform box
+\begin{beamercolorbox}[wd=\textwidth,ht=0.1447\paperheight,dp=0ex]{shadedhead}%
+	%% EC logo
 	\centering
-  \vspace{-1cm}
+	%% 0.02895
+  \vspace{-0.044\paperheight}
 	\pgfuseimage{headimage}
 \end{beamercolorbox}%
 }}
+
+%% title page
+\setbeamertemplate{title page}{
+
+% title
+\vspace{6ex}
+\centering
+{\fontsize{18}{22}\selectfont
+\bfseries
+\color{drk-blue}\inserttitle}
+\vspace{6ex}
+
+% title graphic
+\begin{columns}[Tc]
+\column{0.5\textwidth}
+%\pgfuseimage{titlegraphic}
+	\vskip-1cm
+  \hskip-2.5cm % or \vspace{-2cm} 
+  \includegraphics[width=1.5\textwidth]{graphics/front.jpg}
+
+\column{0.4\textwidth}
+% author
+
+\insertauthor
+\end{columns}
+
+% subtitle
+\insertsubtitle
+
+
+% affiliation
+\insertinstitute
+}
+
+%% frame title
+\setbeamertemplate{frametitle}
+{
+\color{drk-blue}\vspace{2ex}\fontsize{12}{16}\selectfont
+\textbf{\insertframetitle}
+\par
+}
 
 
 % bullet points
 \setbeamertemplate{itemize items}[circle] % if you want a ball
 \setbeamertemplate{itemize subitem}[circle] % if you wnat a circle
 \setbeamertemplate{itemize subsubitem}[circle] % if you want a triangle
-
-%\usefonttheme[stillsansseriflarge]{serif}
-% \usefonttheme[stillsansseriflarge]{structuresmallcapsserif}
