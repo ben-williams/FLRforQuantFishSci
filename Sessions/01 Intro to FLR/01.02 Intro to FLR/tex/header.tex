@@ -2,27 +2,64 @@
 % Iago Mosqueira - JRC. 2012
 %
 
+% packages
+\usepackage{etoolbox}
+\usepackage[absolute,overlay]{textpos}
+
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
+
 %% gets rid of navigation symbols
 \setbeamertemplate{navigation symbols}{}
 
-%% colors
+%% bullet points
+\setbeamertemplate{itemize items}[circle] % if you want a ball
+\setbeamertemplate{itemize subitem}[circle] % if you wnat a circle
+\setbeamertemplate{itemize subsubitem}[circle] % if you want a triangle
+
+%% colors {{{
 \definecolor{ecblue}{RGB}{1,70,147}
 \definecolor{jrcblue}{RGB}{55,172,222}
-
 \setbeamercolor{normal text}{fg=black,bg=white}
 \setbeamercolor{structure}{fg=ecblue} 
+\setbeamercolor{shadedhead}{bg=jrcblue}
+\setbeamercolor{shadedcover}{bg=ecblue,fg=yellow}
+% }}}
 
-%% Images
-% footer image
-\pgfdeclareimage[height=5.5mm]{footimage}{tex/footer}
+%% images {{{
+% footer
+\pgfdeclareimage[height=5.5mm]{footer}{tex/footer}
 
-% header image
-\pgfdeclareimage[width=0.1575\paperwidth]{headimage}{tex/header}
+% header
+\pgfdeclareimage[width=0.1575\paperwidth]{header}{tex/header}
+
+% headerT
+\pgfdeclareimage[width=0.1575\paperwidth]{headerT}{tex/headerT}
 
 % title page image
 \pgfdeclareimage[width=0.6\textwidth]{titlegraphic}{graphics/front}
+% }}}
 
-%% footline
+%% title page {{{
+\setbeamertemplate{title page}{
+
+% main block
+\begin{textblock}{0.8}[0,0](0.15,0.25)
+% title
+{\fontsize{24}{26}\selectfont
+\bfseries
+\color{ecblue}\inserttitle}
+\vskip 2ex
+% affiliation
+{\fontsize{18}{20}\selectfont
+\bfseries
+\color{black}JRC}
+\vfill
+\end{textblock}
+
+} % }}}
+
+%% footline {{{
 %% left: date as in title
 \newcommand{\footlinetext}{\insertdate}
 \setbeamertemplate{footline}{
@@ -32,18 +69,16 @@
 \hspace{0.1mm}
 %% center: jrc logo
 \begin{minipage}{8.5mm}
- \pgfuseimage{footimage}
+ \pgfuseimage{footer}
 \end{minipage}
 \hspace{0.1mm}
 %% right: page number
 \begin{minipage}{50mm}
  \flushright \insertframenumber
 \end{minipage}
-}
+} % }}}
 
-
-%% headline
-\setbeamercolor{shadedhead}{bg=jrcblue}
+%% headline {{{
 \setbeamertemplate{headline}{
 \leavevmode\hbox{%
 %% uniform box
@@ -52,53 +87,14 @@
 	\centering
 	%% 0.02895
   \vspace{-0.044\paperheight}
-	\pgfuseimage{headimage}
+	\pgfuseimage{header}
 \end{beamercolorbox}%
-}}
+}} % }}}
 
-%% title page
-\setbeamertemplate{title page}{
-
-% title
-\vspace{6ex}
-\centering
-{\fontsize{18}{22}\selectfont
-\bfseries
-\color{ecblue}\inserttitle}
-\vspace{6ex}
-
-% title graphic
-\begin{columns}[Tc]
-\column{0.5\textwidth}
-%\pgfuseimage{titlegraphic}
-	\vskip-1cm
-  \hskip-2.5cm % or \vspace{-2cm} 
-  \includegraphics[width=1.5\textwidth]{graphics/front.jpg}
-
-\column{0.4\textwidth}
-% author
-
-\insertauthor
-\end{columns}
-
-% subtitle
-\insertsubtitle
-
-
-% affiliation
-\insertinstitute
-}
-
-%% frame title
+%% frame title {{{
 \setbeamertemplate{frametitle}
 {
 \color{jrcblue}\vspace{2ex}\fontsize{12}{16}\selectfont
 \textbf{\insertframetitle}
 \par
-}
-
-
-% bullet points
-\setbeamertemplate{itemize items}[circle] % if you want a ball
-\setbeamertemplate{itemize subitem}[circle] % if you wnat a circle
-\setbeamertemplate{itemize subsubitem}[circle] % if you want a triangle
+} % }}}

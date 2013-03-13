@@ -1,5 +1,5 @@
 % What FLR is and why it might be good for you
-% FISHREG, JRC
+% Iago MOSQUEIRA
 % March 2013
 
 # What does FLR mean?
@@ -42,7 +42,6 @@ Promote the use of Management Strategy Evaluation and similar simulation-based t
   - Bring the R community and software to fisheries
 
 # FLR now
-
 
 # Packages in FLR
 
