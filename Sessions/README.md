@@ -19,7 +19,7 @@
 │   └── EX FLSR
 ├── 03.03 Extending S4 - FLGrowth (T) IM
 └── 03.04 Reproducible research (T) EJ
-    └── EX knitr
+    └── EX knitr (use markdown for demo, mention knitr & sweave)
 
 04 Stock Assessment
 ├── 04.01 SA biodyn (T) EJ
