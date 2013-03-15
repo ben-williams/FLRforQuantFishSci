@@ -93,5 +93,22 @@ Kell, L. T., Mosqueira, I., Grosjean, P., Fromentin, J-M., Garcia, D., Hillary, 
 \centering
 \includegraphics[keepaspectratio, width=0.3\textwidth]{graphics/gpl3.png}
 
+# ABOUT US
+
+## Ernesto Jardim - STECF, MPs, a4a
+
+## Colin Millar - a4a, MPs
+
+## Iago Mosqueira - FLR, IOTC, MPs
+
+## Chato Osio - MED, STECF
+
+## Finlay Scott - BioEco, FLR
+
+# READY
+
+'Men learn while they teach.'
+
+  Seneca the Younger
 
 

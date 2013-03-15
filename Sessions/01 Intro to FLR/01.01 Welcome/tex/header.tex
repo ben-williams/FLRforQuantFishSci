@@ -3,7 +3,6 @@
 %
 
 % packages
-\usepackage{etoolbox}
 \usepackage[absolute,overlay]{textpos}
 
 \setlength{\TPHorizModule}{\paperwidth}
@@ -37,25 +36,34 @@
 \pgfdeclareimage[width=0.1575\paperwidth]{headerT}{tex/headerT}
 
 % title page image
-\pgfdeclareimage[width=0.6\textwidth]{titlegraphic}{graphics/front}
+\pgfdeclareimage[width=0.5\textwidth]{titlegraphic}{graphics/front}
 % }}}
 
 %% title page {{{
 \setbeamertemplate{title page}{
 
-% main block
-\begin{textblock}{0.8}[0,0](0.15,0.25)
-% title
+% title block
+\begin{textblock}{0.7}[0,0](0.15,0.25)
 \centering
-{\fontsize{24}{26}\selectfont
+{\fontsize{22}{26}\selectfont
 \bfseries
 \color{ecblue}\inserttitle}
-\vskip 2ex
-% affiliation
-{\fontsize{18}{20}\selectfont
-\bfseries
-\color{black}JRC}
+\end{textblock}
+
+% author block
+\begin{textblock}{0.5}[0,0](0.52,0.65)
+{\fontsize{12}{16}\selectfont
+\color{black}
+Maritime Affairs Unit - FISHREG\\
+European Commission\\
+Joint Research Center (IPSC)\\
+}
 \vfill
+\end{textblock}
+
+% picture block
+\begin{textblock}{0.3}[0,0](0,0.55)
+ \pgfuseimage{titlegraphic}
 \end{textblock}
 
 } % }}}
