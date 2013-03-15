@@ -18,7 +18,7 @@ library(FLCore)
 getwd()
 
 # Setting the working directory
-setwd()
+#setwd("directory name")
 
 # Case is important
 # Use // or \ for separating folders and directories in Windows 
@@ -40,7 +40,7 @@ setwd()
 # readVPAFile() reads in a single file (e.g. fishing mortality, catch numbers etc.)
 # Here we read in the catches at age of herring in VIa. This is in the file 'canum.txt'
 # Look at this raw data file in a text editor
-# Read in the file using readVPAFile("name_of_file") (include the file name ending, e.g. .txt)
+# Read in the file using readVPAFile("name_of_file") (include the file name extension, e.g. .txt)
 catch.n <- readVPAFile("Data/her-irlw/canum.txt")
 # Gives you an FLQuant 
 f
@@ -112,19 +112,47 @@ her <- setPlusGroup(her,plusgroup=7)
 # read.table and its friends
 ?read.table
 
-# Many options available
-# My experience is to use read,csv() which is the same as read.table but with many default options already set
 # Key options to look out for:
 # file (obviously)
 # header
 # sep
 # row.names
+# col.names
 
-# Some examples
+# Save your data as a *.csv file (comma separated file)
+# Example file in /Data/catch_numbers.csv
+# Note that we have row and column names (ages and years)
 
-# Catch numbers with no year or age (i.e. no header)
+# Read this in using read.table() with default options
+catch.n <- read.table("Data/catch_numbers.csv")
+catch.n
+# Looks terrible
+# what just happened?
+# The separator in our file is a comma , so we need to specify that
+catch.n <- read.table("Data/catch_numbers.csv", sep=',')
+# Better but the column and row names have been included as data
+# We can try to fix this using the header and row.names options
+catch.n <- read.table("Data/catch_numbers.csv", header=TRUE, sep=',')
+# Specify which column has the row names 
+catch.n <- read.table("Data/catch_numbers.csv", header=TRUE, sep=',', row.names=1)
+# The column names are ugly (with the Xs) but that is OK for now
+# Can use read.csv() instead - same as read.table() but different default options
+catch.n <- read.csv("Data/catch_numbers.csv",row=1)
 
-# Catch numbers with year and age (i.e. with a header)
+# We have read in the data as a data.frame
+class(catch.n)
+# There is an FLQuant contructor that uses a data.frame, but here our data.frame is not set up the right way
+# Instead we can convert the object to a matrix
+catch.n.matrix <- as.matrix(catch.n)
+# We need to specify the dimnames
+catch.n.flq <- FLQuant(catch.n.matrix, dimnames=list(age=1:7, year = 1957:2011))
 
-# Pulls in as a data.frame - not helpful... array or matrix
+# Another option for reading in the data is to omit column and row names from the csv data
+# You would use header=FALSE (else you lose the first row of data)
+# Also leave the row.names argument empty
+catch.n <- read.csv("Data/catch_numbers2.csv", header=FALSE)
+catch.n.matrix <- as.matrix(catch.n)
+catch.n.flq <- FLQuant(catch.n.matrix, dimnames=list(age=1:7, year = 1957:2011))
 
+# If you get get your data into R you can get it into an FLQuant.
+# If you get your data into an FLQuant you get it into any FLR object!
