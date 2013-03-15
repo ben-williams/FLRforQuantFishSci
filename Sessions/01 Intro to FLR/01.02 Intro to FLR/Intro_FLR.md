@@ -2,13 +2,6 @@
 % Iago MOSQUEIRA
 % March 2013
 
-# FLR
-
-## What does FLR mean?
-
-Maybe __F__isheries __L__ibrary in __R__
-
-## What is FLR?
 
 # Why, oh why?
 
@@ -32,7 +25,7 @@ community of quantitative fishery scientists!"
 # FLR 1.4 - *The Golden Jackal*
 
 \centering
-\includegraphics[keepaspectratio, height=0.7\textheight]{flr14.jpg}
+\includegraphics[keepaspectratio, height=0.7\textheight]{graphics/flr14.png}
 
 # A brief history of FLR
 
@@ -50,7 +43,7 @@ community of quantitative fishery scientists!"
 # FLR 2.2 - *Swordfish Polka*
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{flr20.jpg}
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr20.png}
 
 # A brief history of FLR
 
@@ -64,7 +57,7 @@ community of quantitative fishery scientists!"
 # FLR 2.4 - *The Duke of Prawns*
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{flr24.jpg}
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr24.png}
 
 # FLR development
 
@@ -105,13 +98,13 @@ FLR are:
 - **flexibility** - through a design that does not constrain the user to a given paradigm
 - **extendibility** - through the provision of tools that are ready to be personalized and adapted.
 
-# FLR goal
+# FLR goals
 
 To **promote and generalize** the use of **good quality, open source,
 flexible software** in all areas of quantitative fisheries research and
 management advice, with a key focus on Management Strategies Evaluation.
 
-# FLR goal
+# FLR goals
 
 In detail, FLR aims to facilitate and promote research about:
 
@@ -123,7 +116,7 @@ In detail, FLR aims to facilitate and promote research about:
 - Support the development of new models and methods
 - Promote the distribution of new models and methods to a wide public.
 
-# Cut the crap, what is FLR?
+# Really, what is FLR?
 
 - Extendable toolbox for implementing bio-economic simulation models of fishery systems
 - Tools used by managers (hopefully) as well as scientists
@@ -133,6 +126,11 @@ In detail, FLR aims to facilitate and promote research about:
     - Simulate and evaluate management procedures and HCRs,
     - More than just stock assessment (VPA, XSA, ICES uptake)
     - etc....
+- A software platform for quantitative fisheries science
+- A collection of R packages
+- A team of devoted developers
+- A community of active users
+
 
 # R and FLR
 
@@ -142,7 +140,7 @@ Why do we use R?
 - Good graphics capabilities
 - Multi-platform
 - Open source
-- Links with compiled languages like fortran, C / C++ code for speed
+- Links with compiled languages like Fortran, C / C++ code for speed
 - Easily extendable in the form of ’packages’
 
 <!--# Object oriented programming with S4-->
@@ -177,23 +175,21 @@ Why do we use R?
 # MSE - The Lego block approach
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{MSE.png}
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/MSE.png}
 
-# Enough mambo jambo ! Who’s using it ?
-
-In 2009 a simple survey showed that FLR was used in:
-
+# Who’s using it ? (2009)
 - ICES - 22+ stocks
-- STECF - several including HCR studies
+- STECF - Several including MP & HCR studies
 - AFMA - Northern Prawn Fishery
 - CECAF - Istam project
 - CCAMLR - Patagonian toothfish, Mackerel icefish
 - GFCM - Deepwater pink shrimp, Hake in GSA 05
-- ICCAT - Software catalogue, Bluefin CITES evaluations
-- IOTC - Bigeye Tuna, Yellowfin Tuna
+- ICCAT - Bluefin CITES evaluations, Swordfish, Albacore
+- IOTC - Albacore, Skipjack, Bigeye, Yellowfin Tuna
 - NEAFC - Blue Whiting, NOSS Herring
-- NAFO - Greenland Halibut, American Plaice, Cod in Placentia Bay
-- a4a Initiative
+- NAFO - Greenland Halibut, American Plaice, Placentia Cod
+- EC -  Evaluation of new CFP
+- JRC - a4a Initiative
 
 # Open All !!
 
@@ -206,14 +202,27 @@ In 2009 a simple survey showed that FLR was used in:
 # What’s next ?
 
 \centering
-\includegraphics[keepaspectratio, height=0.9\textheight]{flr30.jpg}
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr30.png}
+
+# FLR 2.6
+
+\centering
+\includegraphics[keepaspectratio, width=\textwidth]{graphics/flr26.png}
+
+# FLR 2.6
+
+\centering
+\includegraphics[keepaspectratio, width=\textwidth]{graphics/flr26b.png}
+
 
 # More information
 
-- Development is managed through R-Forge (http://r-forge.r-project.org/projects/flr/)
-- Packages on repository (install.packages(repos="http://flr-project.org/R"))
-- Documentation on wiki (http://www.flr-project.org)
-- "Teach Yourself FLR" wiki (http://tyflr.flr-project.org)
-- Funding comes from a number of EU projects (FEMS, COMMIT, EFIMAS, Fisboat, UNCOVER, JRC)
-- FLR Core Team, aka "*Les miserables*", code, maintenance, tests, documentation, etc.
+- [FLR Project @ http://flr-project.org](http://flr-project.org)
+- [Source code @ http://r-forge.r-project.org/projects/flr/](http://r-forge.r-project.org/projects/flr/)
+- Repositories `install.packages(repos="http://flr-project.org/R")`
+- [Teach Yourself FLR wiki @ http://tyflr.flr-project.org](http://tyflr.flr-project.org)
 
+#
+
+\centering
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/keep-calm-and-code-flr.png}
