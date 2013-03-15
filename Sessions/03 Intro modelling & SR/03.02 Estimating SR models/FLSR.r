@@ -46,33 +46,6 @@ shepherdSV()
 bevholtAR1()
 
 
-myricker <- function () 
-{
-  logl <- function(a, b, rec, ssb) {
-    if (a < 1e-10 || b < 1e-10) return(-1e100)
-    z <- log(rec) - log(a) - log(ssb) + b * ssb
-    n <- length(rec)
-    #sigma2 <- var(z)
-    sigma2 <- mean(z^2)
-    0.5 * (log(1/(2 * pi)) - length(rec) * log(sigma2) - sum(z^2)/(2 * sigma2) ) 
-  }
-  initial <- structure(function(rec, ssb) {
-        logS <- log(c(ssb))
-        logR <- log(c(rec))
-        res <- coefficients(lm(logR ~ c(ssb), offset = logS))
-        return(FLPar(a = exp(res[1]), b = -min(res[2],0)))
-    }, lower = rep(-Inf, 2), upper = rep(Inf, 2))
-    model <- rec ~ a * ssb * exp(-b * ssb)
-    return(list(logl = logl, model = model, initial = initial))
-}
-
-nsher2 <- nsher
-model(nsher2) <- myricker()
-
-system.time(fmle(nsher))
-system.time(fmle(nsher2))
-
-
 # the fmle method then fits the SRR using logl and R's optim
 nsher <- fmle(nsher)
 
@@ -109,6 +82,78 @@ predict(nsher, ssb=ssb(nsher)*1.5)
 nsherSV <- sv(nsher, spr0=0.04)
 
 summary(nsherSV)
+
+
+
+
+
+#### Bootstrapping ##################################################################
+niter <- 999
+res.boot <- sample(c(residuals(nsher)), niter * dims(nsher)$year, replace=T)
+
+sr.bt       <- propagate(nsher, niter)
+rec(sr.bt) <- rec(sr.bt)[] + res.boot
+model(sr.bt) <- ricker()
+
+
+## fits across all iters independently
+#model(sr.bt) <- ricker()
+#system.time(sr.bt  <-fmle(sr.bt))
+
+sr.bt2 <- sr.bt
+model(sr.bt2) <- myricker()
+#system.time(sr.bt2  <- fmle(sr.bt2))
+
+
+library(FLCore)
+
+logl <- function(a, b, rec, ssb) -1 * ricker() $ logl(exp(a), exp(b), rec, ssb)
+llik <- function(par, data) {
+            pars <- as.list(par)
+            names(pars) <- c("a","b")
+            -1 * do.call(logl, args = c(pars, data))
+        }
+
+data(nsher)
+nsher10 <- propagate(nsher, 10)
+model(nsher10) <- ricker()
+
+
+
+out <-
+list(
+  rawlogfoo = system.time(replicate(10, optim(c(0,0), llik, data = list(rec = c(rec(nsher)), ssb = c(ssb(nsher)))))),
+  logfoo = system.time(replicate(10, optim(c(0,0), llik, data = list(rec = rec(nsher), ssb = ssb(nsher))))) ,
+  rawfmle = system.time(tmp  <- fmle(nsher10, preconvert = TRUE)),
+  fmle = system.time(tmp  <- fmle(nsher10))
+)
+
+do.call(rbind, out)
+
+
+
+plot( t(params(sr.bt2)[drop=TRUE]))
+
+################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #### Chunk 1 ###################################################################
@@ -602,216 +647,44 @@ sr.bt       <-fmle(sr.bt,fixed=(list(spr0=0.045)))
 plot(params(sr.bt)["s",]~params(sr.bt)["v",],col="yellow",pch=19)
 ################################################################################
 
-#### Chunk 28 ##################################################################
-dmns      <-dimnames(ssb(nsher))
-dmns$iter <-1:100
-mc.yrs    <-as.integer(sample(dmns$year,length(dmns$iter)*length(dmns$year),replace=T))
-
-sr.bt       <-nsher
-rec(sr.bt)  <-sweep(FLQuant(residuals(sr.bt)[,ac(mc.yrs)],dimnames=dmns),2,fitted(nsher),sum)
-
-model(sr.bt)<-bevholtSV()
-
-## fits across all iters independently
-sr.bt       <-fmle(sr.bt,fixed=(list(spr0=nsher.spr0)))
-
-plot(params(sr.bt)["s",]~params(sr.bt)["v",],col="yellow",pch=19)
-################################################################################
-
-#### Chunk 30 ##################################################################
-# CI
-ll<-logLik(nsher)
-
-# Chi-squared for 1 parameter
-qchisq(.95,1)
-
-## create a function to minimise
-fn<- function(x, y) {(fmle(y,fixed=c(a=x))@logLik - (ll-qchisq(.95,1)/2))^2}
-
-## lower bound
-optimise(f=fn,
-   interval=c(params(nsher)["a",1,drop=T]*.5,params(nsher)["a",1,drop=T]),y=nsher)$minimum
-
-## upper bound
-optimise(f=fn,interval=c(params(nsher)["a",1,drop=T],params(nsher)["a",1,drop=T]*2.0),y=nsher)$minimum
-################################################################################
-
-
-#### Chunk 31 ##################################################################
-param.grid<-profile(nsher,range=0.25)
-param.grid<-data.frame(a=param.grid$x,b=param.grid$y,ll=c(param.grid$z))
-
-image(  interp(param.grid[,"a"], param.grid[,"b"]*1000, param.grid[,"ll"]),xlab='a',ylab='b*1e+3')
-contour(interp(param.grid[,"a"], param.grid[,"b"]*1000, param.grid[,"ll"]),add=T, levels=(logLik(nsher)-qchisq(.95,2)/2), col="navy")
-################################################################################
-
-#### Chunk 32 ##################################################################
-## projection
-################################################################################
-
-#### Chunk 33 ##################################################################
-## speeding up FLSR
-################################################################################
-
-#### Chunk 34 ##################################################################
-## ref pts
-################################################################################
-
-#### Chunk 34 ##################################################################
-## likelihoods
-library(FLash)
-library(numDeriv)
-
-##### Tests for AD FLSR add-ins
-
-##### Likelihoods
-#### Check C++ & R code with dummy data
-xRho      <-0.0
-xResiduals<-FLQuant(rnorm(1000))
-
-system.time(print(.Call("loglAR1", xResiduals,   rho=FLPar(xRho))))
-system.time(print(       loglAR1(  xResiduals,   rho=xRho)))          # calls c++
-system.time(print(       loglAR1(  xResiduals,   rho=xRho,old=TRUE))) # old R
-################################################################################
-
-#### Chunk 34 ##################################################################
-#### First principles using optim ##############################################
-load("C:\\Stuff\\backUp\\Publications\\InPrep\\3stocks\\data\\cod4.RData")
-
-obj        <-as.FLSR(cod4[["ices"]],model=bevholt)
-params(obj)<-initial(obj)(rec(obj),ssb(obj))
-
-## gradients
-ll   <-function(par,rec,ssb) -logl(obj)(par[1],par[2],rec=rec,ssb=ssb)
-llGr <-function(par,rec,ssb) {params(obj)["a"]<-par[1];params(obj)["b"]<-par[2];-computeD(obj)[,1:2]}
-
-# with only LL
-system.time(print(optim(c(a=700000,b=70000),fn=ll,        rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B")))
-
-# with LL & gradient
-system.time(print(optim(c(a=700000,b=70000),fn=ll,gr=llGr,rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B")))
-
-model(obj)<-srModel("bevholt")
-params(obj)<-initial(obj)(rec(obj),ssb(obj))
-
-gr(obj)(params(obj)["a"],params(obj)["b"],rec(obj),ssb(obj))
-
-llGr2 <-function(par,rec,ssb) {gr(obj)(par["a"],par["b"],rec,ssb)}
-system.time(print(optim(c(a=700000,b=70000),fn=ll,gr=llGr2,rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B")))
-################################################################################
-
-
- #### Chunk 34 ##################################################################
-## likelihodos
-################################################################################
-#### Chunk 34 ##################################################################
-## likelihodos
-################################################################################
-#### Chunk 34 ##################################################################
-## likelihodos
-################################################################################
-#### Chunk 34 ##################################################################
-## likelihodos
-################################################################################
-#### Chunk 34 ##################################################################
-## likelihodos
-################################################################################
 
 
 
-#### OLD #######################################################################
-#### Chunk 23 ##################################################################
-param.grid<-profile(her4RK,range=0.25)
-param.grid<-data.frame(a=param.grid$x,b=param.grid$y,ll=c(param.grid$z))
 
-image(  interp(param.grid[,"a"], param.grid[,"b"]*1000, param.grid[,"ll"]),xlab='a',ylab='b*1e+3')
-contour(interp(param.grid[,"a"], param.grid[,"b"]*1000, param.grid[,"ll"]),add=T, levels=(logLik(her4RK)-qchisq(.95,2)/2), col="navy")
-################################################################################
 
-#### Chunk 24 ##################################################################
-library(FLash)
-library(numDeriv)
 
-load("C:\\Stuff\\backUp\\Publications\\InPrep\\3stocks\\data\\cod4.RData")
 
-##### Tests for AD FLSR add-ins
 
-##### Likelihoods
-#### Check C++ & R code with dummy data
-xRho      <-0.0
-xResiduals<-FLQuant(rnorm(1000))
 
-system.time(print(.Call("loglAR1", xResiduals,   rho=FLPar(xRho))))
-system.time(print(       loglAR1(  xResiduals,   rho=xRho)))          # calls c++
-system.time(print(       loglAR1(  xResiduals,   rho=xRho,old=TRUE))) # old R
-################################################################################
 
-#### Chunk 25 ##################################################################
-##### Fitting
-obj<-as.FLSR(cod4[["ices"]],model=bevholt)
 
-#### First principles using optim ##############################################
-ll  <-function(par,rec,ssb) -logl(obj)(par[1],par[2],rec=rec,ssb=ssb)
-llGr<-function(par,rec,ssb) {params(obj)["a"]<-par[1];params(obj)["b"]<-par[2];computeD(obj)[,1:2]}
 
-# with only LL
-system.time(optim(c(a=700000,b=70000),fn=ll,        rec=rec(obj),ssb=ssb(obj),method="BFGS"))
 
-# with LL & gradient
-system.time(optim(c(a=700000,b=70000),fn=ll,gr=llGr,rec=rec(obj),ssb=ssb(obj),method="BFGS"))
+myricker <- function () 
+{
+  logl <- function(a, b, rec, ssb) {
+    if (a < 1e-10 || b < 1e-10) return(-1e100)
+    z <- log(rec) - log(a) - log(ssb) + b * ssb
+    n <- length(rec)
+    #sigma2 <- var(z)
+    sigma2 <- mean(z^2)
+    0.5 * (log(1/(2 * pi)) - length(rec) * log(sigma2) - sum(z^2)/(2 * sigma2) ) 
+  }
+  initial <- structure(function(rec, ssb) {
+        S <- c(ssb)
+        logS <- log(S)
+        logR <- log(c(rec))
+        res <- coefficients(lm(logR ~ S, offset = logS))
+        return(FLPar(a = exp(res[1]), b = -min(res[2],0)))
+    }, lower = rep(-Inf, 2), upper = rep(Inf, 2))
+    model <- rec ~ a * ssb * exp(-b * ssb)
+    return(list(logl = logl, model = model, initial = initial))
+}
 
-#### Chunk 26 ##################################################################
-computeGrad=function(object,method="Richardson",
-      method.args=list(eps=1e-4, d=0.0001, zero.tol=sqrt(.Machine$double.eps/7e-7), r=4, v=2, show.details=FALSE), ...){
+nsher2 <- nsher
+model(nsher2) <- myricker()
 
-     ## wrapper function from grad to call
-     fn=function(x,sr){
-       x.         =as.list(x)
-       names(x.)  =dimnames(x)$params
-
-        x.[["ssb"]]=sr@ssb
-        x.[["rec"]]=sr@rec
-
-       logl.      =sr@logl
-       res        =do.call("logl.",x.)
-
-       return(res)}
-
-     grad(fn,x=c(object@initial(object@rec,object@ssb)),
-               method=method,method.args=method.args,
-               sr=object)}
-
-#### FLSR
-obj<-as.FLSR(ple4,model=bevholt)
-system.time(obj<-fmle(obj))
-
-# add gradient using computeD & check
-gr(obj)<-function(a,b,rec,ssb) {params(obj)["a"]<-a;params(obj)["b"]<-b;ssb(obj)<-ssb;rec(obj)<-rec;FLPar(computeD(obj)[,1:2])}
-gr(obj)<-function(a,b,rec,ssb) {params(obj)["a"]<-a;params(obj)["b"]<-b;ssb(obj)<-ssb;rec(obj)<-rec;FLPar(computeGrad(obj))}
-
-gr(obj)(initial(obj)(rec(obj),ssb(obj))["a"],initial(obj)(rec(obj),ssb(obj))["b"],rec(obj),ssb(obj))
-system.time(obj<-fmle(obj))
-
-# check LL
-logl(obj)(initial(obj)(rec(obj),ssb(obj))["a"],initial(obj)(rec(obj),ssb(obj))["b"],rec(obj),ssb(obj))
-
-# check both
-ll  <-function(par,rec,ssb) -logl(obj)(par[1],par[2],rec=rec,ssb=ssb)
-llGr<-function(par,rec,ssb) -c(gr(  obj)(par[1],par[2],rec=rec,ssb=ssb)[1:2])
-system.time(res1<-optim(c(a=1171537,b=181093),fn=ll,        rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B"))
-system.time(res2<-optim(par=c(a=1171537,b=181093),fn=ll,gr=llGr,rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B"))
-
-model(obj) <-srModel("bevholt")
-params(obj)<-initial(obj)(rec(obj),ssb(obj))
-gr(obj)(1171537,181093,rec(obj),ssb(obj))
-llGr(obj)(1171537,181093,rec(obj),ssb(obj))
-gr(obj)(initial(obj)(rec(obj),ssb(obj))["a"],initial(obj)(rec(obj),ssb(obj))["b"],rec(obj),ssb(obj))
-system.time(res1<-optim(par=c(a=1171537,b=181093),fn=ll,gr=gr,  rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B"))
-system.time(res2<-optim(par=c(a=1171537,b=181093),fn=ll,gr=llGr,rec=rec(obj),ssb=ssb(obj),method="L-BFGS-B"))
-system.time(obj<-fmle(obj))
-logl(obj)(params(obj)["a"],params(obj)["b"],rec(obj),ssb(obj))
-  gr(obj)(params(obj)["a"],params(obj)["b"],rec(obj),ssb(obj))
-################################################################################
-
+system.time(fmle(nsher))
+system.time(fmle(nsher2))
 
 
