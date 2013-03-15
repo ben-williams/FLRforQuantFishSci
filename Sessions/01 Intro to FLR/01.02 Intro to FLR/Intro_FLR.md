@@ -1,12 +1,29 @@
-% What FLR is and why it might be good for you
+% The FLR platform for quantitative fisheries science
 % Iago MOSQUEIRA
 % March 2013
 
-# What does FLR mean?
+# FLR
+
+## What does FLR mean?
 
 Maybe __F__isheries __L__ibrary in __R__
 
+## What is FLR?
+
 # Why, oh why?
+Schnute et al. (2007 and 1998) compared the number of
+software tools and languages currently available for stock
+assessments with the Babel tower myth:
+
+> "After the people of Babel sought to build a tower to heaven, the Lord
+> God devised a plan (Genesis 11: 4-7). ’Behold the people is one; and
+> they all have one language; and this they began to do; and now nothing
+> will be restrained from them, which they have imagined to do.... Let us
+> go down, and there confound their language, that they may not
+> understand one another’s speech.’ Italics highlight the prospects for
+> accomplishment with a common language, if the scientific community
+> could ever agree on one"
+
 
 # A brief history of FLR time
 
@@ -44,6 +61,9 @@ Promote the use of Management Strategy Evaluation and similar simulation-based t
 # FLR now
 
 # Packages in FLR
+
+\centering
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/scheme.png}
 
 # State of development
 
