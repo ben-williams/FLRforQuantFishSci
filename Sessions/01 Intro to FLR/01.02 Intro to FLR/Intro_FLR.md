@@ -27,7 +27,7 @@ community of quantitative fishery scientists!"
 \centering
 \includegraphics[keepaspectratio, height=0.7\textheight]{graphics/flr14.png}
 
-# A brief history of FLR
+# A brief history of FLR (cont.)
 
 - 2007-2009: The Silk Road to version 2
     - New FLQuant with 6 dimensions: uncertainty in structure
@@ -45,7 +45,7 @@ community of quantitative fishery scientists!"
 \centering
 \includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr20.png}
 
-# A brief history of FLR
+# A brief history of FLR (cont. even more)
 
 - 2009-2011: Settling ideas with 2.4
     - Clean code
