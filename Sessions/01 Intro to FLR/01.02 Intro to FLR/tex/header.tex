@@ -2,6 +2,9 @@
 % Iago Mosqueira - JRC. 2012
 %
 
+%
+%\def\input@path{{/path/to/folder}}
+
 % packages
 \usepackage[absolute,overlay]{textpos}
 
@@ -36,55 +39,37 @@
 \pgfdeclareimage[width=0.1575\paperwidth]{headerT}{tex/headerT}
 
 % title page image
-\pgfdeclareimage[width=0.5\textwidth]{titlegraphic}{graphics/front}
+\pgfdeclareimage[width=0.6\textwidth]{titlegraphic}{graphics/front}
 % }}}
 
 %% title page {{{
 \setbeamertemplate{title page}{
 
 % title block
-\begin{textblock}{0.7}[0,0](0.15,0.25)
+\begin{textblock}{0.7}[0,0](0.15,0.2)
 \centering
-{\fontsize{22}{26}\selectfont
+{\fontsize{18}{26}\selectfont
 \bfseries
 \color{ecblue}\inserttitle}
 \end{textblock}
 
 % author block
-\begin{textblock}{0.5}[0,0](0.52,0.65)
+\begin{textblock}{0.5}[0,0](0.55,0.55)
 {\fontsize{12}{16}\selectfont
 \color{black}
-Maritime Affairs Unit - FISHREG\\
+FISHREG\\
+Maritime Affairs Unit - IPSC\\
 European Commission\\
-Joint Research Center (IPSC)\\
+Joint Research Center\\
 }
 \vfill
 \end{textblock}
 
 % picture block
-\begin{textblock}{0.3}[0,0](0,0.55)
+\begin{textblock}{0.5}[0,0](0,0.47)
  \pgfuseimage{titlegraphic}
 \end{textblock}
 
-} % }}}
-
-%% footline {{{
-%% left: date as in title
-\newcommand{\footlinetext}{\insertdate}
-\setbeamertemplate{footline}{
-\begin{minipage}{58mm}
-\hspace{7.5mm} \footlinetext
-\end{minipage}
-\hspace{0.1mm}
-%% center: jrc logo
-\begin{minipage}{8.5mm}
- \pgfuseimage{footer}
-\end{minipage}
-\hspace{0.1mm}
-%% right: page number
-\begin{minipage}{50mm}
- \flushright \insertframenumber
-\end{minipage}
 } % }}}
 
 %% headline {{{
@@ -106,4 +91,23 @@ Joint Research Center (IPSC)\\
 \color{jrcblue}\vspace{2ex}\fontsize{12}{16}\selectfont
 \textbf{\insertframetitle}
 \par
+} % }}}
+
+%% footline {{{
+%% left: date as in title
+\newcommand{\footlinetext}{\insertdate}
+\setbeamertemplate{footline}{
+\begin{minipage}{58mm}
+\hspace{7.5mm} \footlinetext
+\end{minipage}
+\hspace{0.1mm}
+%% center: jrc logo
+\begin{minipage}{8.5mm}
+ \pgfuseimage{footer}
+\end{minipage}
+\hspace{0.1mm}
+%% right: page number
+\begin{minipage}{50mm}
+ \flushright \insertframenumber
+\end{minipage}
 } % }}}
