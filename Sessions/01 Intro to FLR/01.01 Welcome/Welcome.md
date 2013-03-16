@@ -5,19 +5,8 @@
 # Welcome to (almost) the EC JRC, Ispra, Italy.
 
 \centering
-\includegraphics[keepaspectratio, width=0.6\textwidth]{graphics/jrcispra.png}
+\includegraphics[keepaspectratio, width=0.8\textwidth]{graphics/jrcispra.png}
 
-
-# OUTLINE
-
-1. Introduction to FLR
-2. Load data and EDA
-3. Introduction to modelling: FLSR
-4. Stock assessment
-5. Reference points
-6. Forecasting
-7. Simulation
-8. A Case study
 
 # AGENDA
 
@@ -39,7 +28,7 @@
 # MATERIALS
 
 - R 2.15.*
-- RStudio
+- RStudio or other text editor
 
 # INSTALLATION
 
@@ -65,6 +54,17 @@
 * `FLa4a`
 * `FLash`
 * `SQLiteFL`
+
+# OUTLINE
+
+1. Introduction to FLR
+2. Load data and EDA
+3. Introduction to modelling: FLSR
+4. Stock assessment
+5. Reference points
+6. Forecasting
+7. Simulation
+8. A Case study
 
 # HOW WILL IT RUN
 
