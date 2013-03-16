@@ -1,16 +1,17 @@
-gitroot=`git rev-parse --show-toplevel`
-FILE=template
+#
+DOC=
 
 all:
+	pandoc -t beamer -S -H tex/header.tex $(DOC).md -o $(DOC).pdf
 
-knit:
-	R -e "library(knitr); knit('$(FILE).Rmd')"
+tex:
+	pandoc -t beamer -S -H tex/header.tex $(DOC).md -o $(DOC).tex
 
-pdf: $(FILE).md
-	pandoc -S --biblio $(FILE).bib $(FILE).md -o $(FILE).pdf
-
-hmtl: $(FILE).md
-	pandoc -S --biblio $(FILE).bib $(FILE).md -o $(FILE).html
+test:
+	pandoc -t beamer $(DOC).md -o $(DOC).pdf
 
 clean:
-	rm -rf *.log *.bbl *.blg *.out *.spl
+	rm -f $(DOC).aux $(DOC).log $(DOC).out
+
+cleanall: clean
+	rm -f $(DOC).pdf
