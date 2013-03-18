@@ -5,11 +5,10 @@
 # The FLStock class
 
 
-
 An FLStock is mean to represent the population dynamics of a given stock. The quantitative data that need to be measured and  popultate the FlStock are the following 
 All quantities in a stock are stored in FLQuant objects. This allows for storage of by e.g. age or length, in years, units, seasons and areas.
 
-catch        # FLQuant holding the total catch (landings plus discards) in weight for all quants
+* catch: # FLQuant holding the total catch (landings plus discards) in weight for all quants
 
 catch.n      # FLQuant holding the catch in numbers by quant
 
@@ -46,7 +45,7 @@ m.spwn       # FLQuant holding the fraction of the natural mortality ocurring be
 
 # Methods
 
-Calculations
+* Calculations
 
 Summary
 
@@ -61,4 +60,4 @@ Accessors
 Conversions
 
 # All at once
-\centering \includegraphics[keepaspectratio, width=\textwidth]{graphics/FLStock.png}
+\centering \includegraphics[keepaspectratio, height=0.8\textheight]{graphics/FLStock.png}

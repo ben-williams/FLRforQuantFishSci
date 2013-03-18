@@ -12,6 +12,9 @@
 # Class structure
 # load data from Plaice stocks in N Atlantic ICES area IV
 
+library(FLCore)
+library(ggplotFL)
+
 data(ple4)
 
 help("FLStock-class")
@@ -31,21 +34,24 @@ desc(ple4)
 range(ple4)
 
 # catch =~ landings + discards
-ple4@landings+ple4@discards
-ple4@catch
+landings(ple4) + discards(ple4)
+
+catch(ple4)
+
+catch(ple4) <- landings(ple4) + discards(ple4)
 
 # data & results
 
 # *, *.n & *.wt
-ple4@catch.n
-sum(ple4@catch.n[,"2001",,,,] * ple4@catch.wt[,"2001",,,,])
+catch.n(ple4)
+quantSums(catch.n(ple4)[,"2001",,,,] * catch.wt(ple4)[,"2001",,,,])
 
-ple4@catch[,"2001",,,,]
+catch(ple4)[,"2001",,,,]
 
 # m, m.spwn
-ple4@m # natural mortality
+m(ple4) # natural mortality
 
-ple4@m.spawn # fraction of the natural mortality ocurring before spawning
+m.spwn(ple4) # fraction of the natural mortality ocurring before spawning
 
 # harvest, harvest.spwn
 # stock
