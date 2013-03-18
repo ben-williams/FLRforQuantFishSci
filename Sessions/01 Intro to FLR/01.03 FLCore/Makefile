@@ -1,5 +1,5 @@
 #
-DOC=Intro_FLR
+DOC=FLCore
 
 all:
 	pandoc -t beamer -H tex/header.tex $(DOC).md -o $(DOC).pdf

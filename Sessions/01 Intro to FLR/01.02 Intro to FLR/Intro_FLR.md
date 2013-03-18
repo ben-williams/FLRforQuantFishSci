@@ -25,7 +25,7 @@ community of quantitative fishery scientists!"
 # FLR 1.4 - *The Golden Jackal*
 
 \centering
-\includegraphics[keepaspectratio, height=0.7\textheight]{graphics/flr14.png}
+\includegraphics[keepaspectratio, height=0.7\textheight]{graphics/WolfGoldenJackal.jpg}
 
 # A brief history of FLR (cont.)
 
@@ -87,6 +87,9 @@ FLR is a **collaborative development project**, where distinct scientists that c
 "I think the real issue about adoption of open source is that \textbf{nobody can really ever 'design' a complex system}.  That's simply not how things work: people aren't that smart - nobody is.  And what open source allows is to not actually 'design' things, but let them \textbf{evolve}, through lots of different pressures in the market, and having the end result just \textbf{continually improve}"\newline
 
 Linus Torvalds
+
+\flushright
+\includegraphics[keepaspectratio, height=0.3\textheight]{graphics/askmeOA.png}
 
 # Mission statement
 

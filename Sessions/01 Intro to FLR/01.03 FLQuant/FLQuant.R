@@ -9,7 +9,37 @@
 
 # arrays
 
+arr <- array()
+
+is(arr)
+
+array(dim=c(3,3,3))
+
+array(dim=c(3,3,3),
+	dimnames=list(up=c(1,2,3), down=c('a','b','c'), here=c('qui','ca','aqui')))
+
 # life in 6D
+
+# A 6D array in R
+arr <- array(1:144, dim=c(3,3,2,2,2,2))
+
+arr
+
+# subseting requires specifying all dims
+arr[1:2,,,,,]
+
+# dims are dropped if length == 1
+dim(arr[,,,,,2])
+
+# equivalent 2D representation of data
+dfa <- cbind(expand.grid(d1=1:3, d2=1:3, d3=1:2, d4=1:2, d5=1:2, d6=1:6),
+	data=1:144)
+
+# compare
+head(dfa)
+
+# vs.
+arr[,,,1,1,1]
 
 
 # STARTING with FLQuant
@@ -186,25 +216,53 @@ naa * exp(c(1:7))
 
 # apply
 
-# sweep
+# A most useful function for arrays
+# e.g. to sum over the first dimension
+apply(bma, 2:6, sum)
 
-# expand
+# or get the mean abundance at age for the last 3 years
+apply(bma[,as.character(2007:2009)], c(1,3:6), mean)
+
+# sweep
 
 
 # ITERS
 
 # FLQuant()
 
-# propagate
+# Adding iters in dim, dimnames, or iter
+flq <- FLQuant(rlnorm(100), dim=c(10,1,1,1,1,10), quant='age')
+
+flq <- FLQuant(rlnorm(100), dimnames=list(age=1:10, iter=1:10))
+
+flq <- FLQuant(rlnorm(100), dimnames=list(age=1:10), iter=10)
+
+# propagate, to expand an existing object
+bmi <- propagate(bma, iter=10)
+
+# with NAs
+bmi <- propagate(bma, iter=10, fill.iter=FALSE)
+
+# or copies of the first iter
+bmi <- propagate(bma, iter=10, fill.iter=TRUE)
 
 # iter, iter<-
+# to access or modify a subset of iters, as in [,,,,,*]
+iter(flq, 1)
+
+iter(flq, 1:2)
 
 # iterMeans, iterVars
+# shortcuts for apply(x, 1:5, mean/var)
+iterMeans(flq)
+
+iterVars(flq)
 
 # quantile
-
+quantile(flq, probs=0.05)
 
 
 # %*% OPERATIONS
+# Difference in dimensions taken care of
 waa[1,] %*% naa
 

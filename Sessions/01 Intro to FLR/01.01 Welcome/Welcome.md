@@ -40,6 +40,9 @@
 
 `install.packages("")`
 
+* `akima`
+* `ggplot2`
+* `plyr`
 * `knitr`
 * `RcppArmadillo`
 
@@ -49,10 +52,12 @@
 
 * `FLCore`
 * `FLEDA`
-* `ggplotFL`
-* `FLAdvice`
-* `FLa4a`
 * `FLash`
+* `ggplotFL`
+* `FLBRP`
+* `FLAssess`
+* `FLa4a`
+* `FLXSA`
 * `SQLiteFL`
 
 # OUTLINE
@@ -105,7 +110,7 @@ Kell, L. T., Mosqueira, I., Grosjean, P., Fromentin, J-M., Garcia, D., Hillary, 
 
 ## Finlay Scott - BioEco, FLR
 
-# READY
+# READY !!
 
 'Men learn while they teach.'
 
