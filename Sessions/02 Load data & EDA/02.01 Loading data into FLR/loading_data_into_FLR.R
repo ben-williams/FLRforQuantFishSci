@@ -43,7 +43,7 @@ getwd()
 # Read in the file using readVPAFile("name_of_file") (include the file name extension, e.g. .txt)
 catch.n <- readVPAFile("Data/her-irlw/canum.txt")
 # Gives you an FLQuant 
-f
+catch.n
 
 
 # readFLStock()
@@ -144,8 +144,10 @@ class(catch.n)
 # There is an FLQuant contructor that uses a data.frame, but here our data.frame is not set up the right way
 # Instead we can convert the object to a matrix
 catch.n.matrix <- as.matrix(catch.n)
+catch.n.matrix
 # We need to specify the dimnames
 catch.n.flq <- FLQuant(catch.n.matrix, dimnames=list(age=1:7, year = 1957:2011))
+catch.n.flq
 
 # Another option for reading in the data is to omit column and row names from the csv data
 # You would use header=FALSE (else you lose the first row of data)
