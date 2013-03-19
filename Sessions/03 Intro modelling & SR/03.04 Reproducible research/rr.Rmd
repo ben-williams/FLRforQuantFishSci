@@ -76,7 +76,6 @@ flq <- FLQuant(rnorm(100), dimnames=c(age=1:10, year=1:10))
 flq <- FLQuant(rnorm(100), dimnames=c(age=1:10, year=1:10))
 ```
 
-
 Plots are easy, just call plot.
 
 ```{r fig.width=7, fig.height=6}
