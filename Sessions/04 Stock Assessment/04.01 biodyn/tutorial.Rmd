@@ -1,0 +1,41 @@
+Biomass dynamic models with FLBioDym
+=========================
+Ispra, 18th - 22nd March, 2013
+-------------------------
+
+# Install FLBioDym
+
+```{r eval=FALSE}
+install.packages("FLBioDym", repos="http://flr-project.org/Rdevel")
+```
+
+# FLBioDym
+
+* Pella-Tomlinson (generalizes biomass dynamic models)
+    * pelat: B[t+1] = B[t] + r/p*B[t]*(1-(B[t]/k)^p)) - C[t]
+    * Schaeffer with $p=1$
+    * Fox with $p \sim 0$
+
+* Interfaces with ADMB for model fit
+
+# Example
+
+```{r message=FALSE, warning=FALSE}
+library(FLBioDym)
+data(ple4)
+ple4.bd <- FLBioDym(catch=catch(ple4), index=stock(ple4))
+```
+
+```{r fig.width=7, fig.height=6}
+plot(ple4.bd)
+```
+
+# Fitting
+
+bounds(ple4.bd)
+ple4.bd@bounds
+ple4.bd@bounds["r", c("lower", "upper", "start")] <- c(0.1,0.4,0.2)
+ple4.bd@bounds["k", "start"] <- c(max(catch(ple4))*2)
+
+
+
