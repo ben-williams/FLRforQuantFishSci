@@ -66,7 +66,7 @@ discards(ple4) <- computeDiscards(ple4)
 # summary & plot
 # transform
 
-#  window, [, qapply
+# window, [, qapply
 # Check year range # window()
 
 range(ple4)
@@ -92,10 +92,10 @@ summary(expand(ple4, year=1957:2057))
 
 
 # replace using logical values
-ple4@catch[[20]]<-99
-plot(ple4@catch)
-ple4@catch[ple4@catch==99] <- 100000
-plot(ple4@catch)
+catch(ple4)[[20]]<-99
+plot(catch(ple4))
+catch(ple4)[catch(ple4)==99] <- 100000
+plot(catch(ple4))
 
 # summary of a FLStock
 summary(ple4)
@@ -106,44 +106,44 @@ plot(ple4)
 
 # or individual parts
 plot(stock(ple4))
-plot(ple4@stock)
-plot(ple4@landings)
+plot(stock(ple4))
+plot(landings(ple4))
 
 # Methods for usual computations
 
-# rec = stock.n[rec.age=first.age,]
+#METHODS rec = stock.n[rec.age=first.age,]
 rec(ple4)
 
-# Calculate Spawning Stock Biomass (SSB)
+#METHODS Calculate Spawning Stock Biomass (SSB)
 # SSB = stock.n * exp(-F * F.spwn - M * M.spwn) * stock.wt * mat
 ssb(ple4)
 
 object<-ple4
-colSums(object@stock.n * exp(-object@harvest * 
-  object@harvest.spwn - object@m * object@m.spwn) * 
+colSums(object@stock.n * exp(-object@harvest *
+	object@harvest.spwn - object@m * object@m.spwn) *
 	object@stock.wt * object@mat, na.rm = FALSE)
 
 getMethod("ssb", "FLStock")
 
-# Fbar = mean(F between fbar ages)
+#METHODS Fbar = mean(F between fbar ages)
 fbar(ple4)
 getMethod("fbar", "FLStock")
 
-# fapex = max F per year
+#METHODS fapex = max F per year
 fapex(ple4)
 
-# ssbpurec = SSB per unit recruit
+#METHODS ssbpurec = SSB per unit recruit
 ssbpurec(ple4)
 
-# r = stock reproductive potential
+#METHODS r = stock reproductive potential
 r(ple4)
 
-# survprob = survival probabilities by year or cohort
+#METHODS survprob = survival probabilities by year or cohort
 survprob(ple4)
 survprob(ple4, by ='cohort')
 plot(survprob(ple4))
 
-# coercion
+#METHODS coercion
 # as.FLSR
 ple4SR<-as.FLSR(ple4)
 summary(ple4SR)
@@ -158,13 +158,4 @@ as.data.frame(ple4@catch)
 as.data.frame(ple4@catch.n)
 
 
-# calculations: ssb, fbar
-# summary & plot
-# transform
-#  window, [, qapply
-# coercion
-# as.FLSR
-
-
-# Constructor
 
