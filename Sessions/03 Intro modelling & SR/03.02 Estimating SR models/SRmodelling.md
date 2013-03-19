@@ -6,7 +6,7 @@ command:
 
 ~~~~ {.code .R}
 library(FLCore)
-data(nsher)
+data(ple4)
 ~~~~
 
 
@@ -18,9 +18,17 @@ Ricker stock recruit function
 \text{Recruitment} = a \times \text{SSB} \times e^{-b \times{SSB} }
 \end{align*}
 
-~~~~ {.code .R}
-rec ~ a * ssb * exp( -b * ssb)
-~~~~
+
+------------
+
+\includegraphics[width = \textwidth]{reproduction}
+
+
+------------
+
+\includegraphics[width = \textwidth]{ricker}
+
+
 
 Some reading on stock recruit models
 ------------

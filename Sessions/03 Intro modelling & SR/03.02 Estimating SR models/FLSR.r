@@ -5,20 +5,43 @@
 ## FLSR is found in FLCore
 library(FLCore)
 
-# Example dataset; North Sea Herring
-data(nsher)
+data(ple4)
+
+# So 
+##  we have read in our data
+##  we have fitted a stock recruitment model
+
+# Now we have an FLStock object that has estimates of stock.n
+
+# stock numbers
+stock.n(ple4)
+
+# weight at age and maturity at age
+rec(ple4)
+ssb(ple4)
+
+#### Creation from an FLStock
+
+pleSR <-as.FLSR(ple4)
+
+### Note the shift in years, reflecting that recruitment is at age 1 in the ple4
+ssb(ple4SR)
+rec(ple4SR)
+
+summary(ple4SR)
+################################################################################
 
 # Let's look at the FLSR class
 summary(nsher)
 
-# What slots are in an FLSR object?
-getSlots('FLSR')
+## lets look at the contents
+# recruitment
+rec(nsher)
 
-# What are the avialable FLSR methods?
-showMethods(class="FLSR")
+# ssb
+ssb(nsher)
 
 
-## what changes for the different SRRs?
 #### Model and likelihood are functions of the FLSR class
 model(nsher)
 logl(nsher)
@@ -79,8 +102,8 @@ nsherFixed <- fmle(nsher, fixed=list(a=130))
 # methods exist for Akaike Information Criterion
 AIC(nsher)
 AIC(nsherFixed)
-
 # and Schwarz's Bayesian Information Criterion
+
 BIC(nsher)
 BIC(nsherFixed)
 
