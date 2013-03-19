@@ -10,54 +10,56 @@ All quantities in a stock are stored in FLQuant objects. This allows for storage
 
 * catch: # FLQuant holding the total catch (landings plus discards) in weight for all quants
 
-catch.n      # FLQuant holding the catch in numbers by quant
+*catch.n:      # FLQuant holding the catch in numbers by quant
 
-catch.wt     # FLQuant holding the weight at quant in the catch, usually obtained from those for landings and discards
+*catch.wt:     # FLQuant holding the weight at quant in the catch, usually obtained from those for landings and discards
 
-discards     # FLQuant holding the total discards in weight for all quants
+*discards:     # FLQuant holding the total discards in weight for all quants
 
-discards.n   # FLQuant holding the discards by quant in numbers
+*discards.n:   # FLQuant holding the discards by quant in numbers
 
-discards.wt  # FLQuant holding the weight at quant of the discards
+*discards.wt:  # FLQuant holding the weight at quant of the discards
 
-landings     # FLQuant holding the total landings for all quants
+*landings:     # FLQuant holding the total landings for all quants
 
-landings.n   # FLQuant holding the landings in numbers by quant
+*landings.n:   # FLQuant holding the landings in numbers by quant
 
-landings.wt  # FLQuant holding the weight at quant of landings
+*landings.wt:  # FLQuant holding the weight at quant of landings
 
-stock        # FLQuant holding the stock weight for all quants. Usually obtained from an assessment method
+# The FLStock class
 
-stock.n      # FLQuant holding the stock numbers by quant, output from a quant-structured assessment method
+*stock:        # FLQuant holding the stock weight for all quants. Usually obtained from an assessment method
 
-stock.wt     # FLQuant holding the weights at quant in the stock
+*stock.n:      # FLQuant holding the stock numbers by quant, output from a quant-structured assessment method
 
-m            # FLQuant holding the natural mortality by quant
+*stock.wt:     # FLQuant holding the weights at quant in the stock
 
-mat          # FLQuant holding the maturity by quant, usually as a proportion
+*m:            # FLQuant holding the natural mortality by quant
 
-harvest      # FLQuant holding the harvest mode rate by quant
+*mat:          # FLQuant holding the maturity by quant, usually as a proportion
 
-harvest.spwn # FLQuant holding the fraction of the harvest mode ocurring before spawning
+*harvest:      # FLQuant holding the harvest mode rate by quant
 
-m.spwn       # FLQuant holding the fraction of the natural mortality ocurring before spawning
+*harvest.spwn: # FLQuant holding the fraction of the harvest mode ocurring before spawning
+
+*m.spwn:       # FLQuant holding the fraction of the natural mortality ocurring before spawning
 
 
 # Methods
 
 * Calculations
 
-Summary
+* Summary
 
-Subset
+* Subset
 
-Operations
+* Operations
 
-Plot
+* Plot
 
-Accessors
+* Accessors
 
-Conversions
+* Conversions
 
 # All at once
 \centering \includegraphics[keepaspectratio, height=0.8\textheight]{graphics/FLStock.png}
