@@ -17,21 +17,40 @@ data(ple4)
 stock.n(ple4)
 
 # weight at age and maturity at age
-rec(ple4)
 ssb(ple4)
+
+rec(ple4)
 
 #### Creation from an FLStock
 
 pleSR <-as.FLSR(ple4)
 
-### Note the shift in years, reflecting that recruitment is at age 1 in the ple4
-ssb(ple4SR)
-rec(ple4SR)
+summary(pleSR)
 
-summary(ple4SR)
+
+### Note the shift in years, reflecting that recruitment is at age 1 in the ple4
+ssb(pleSR)
+rec(pleSR)
+
+
+
+# what if we want to investigate the recruitment at age 2?
+pleSR2 <-as.FLSR(ple4[-1])
+
+### Note the shift in years, reflecting that recruitment is now at age 2
+ssb(pleSR2)
+rec(pleSR2)
+
+plot(ssb(pleSR), rec(pleSR))
+
+
 ################################################################################
 
-# Let's look at the FLSR class
+# Let's look something with a better relationship
+data(nsher)
+
+plot(ssb(nsher), rec(nsher))
+
 summary(nsher)
 
 ## lets look at the contents
@@ -115,12 +134,6 @@ predict(nsher, ssb=ssb(nsher)*1.5)
 
 
 
-
-
-
-
-
-
 #### Creation from an FLStock
 data(ple4)
 
@@ -142,23 +155,6 @@ model(ple4SR)<-bevholt()
 ple4SR<-as.FLSR(ple4,model="bevholt")
 ################################################################################
 
-#### fitting
-
-## copy object
-nsherRK       <-nsher
-
-## choose SRR
-model(nsherRK)<-ricker()
-
-system.time(badFit        <-fmle(nsherRK, start=c(a=1,b=2)))
-
-system.time(nsherRK       <-fmle(nsherRK))
-
-
-
-#### plot fit and diagnostics
-plot(nsherRK)
-################################################################################
 
 # parameter values can also be fixed
 nsherRKFixed  <-fmle(nsherRK, fixed=list(a=63580373))
@@ -200,45 +196,26 @@ model(pleSegR)<-segreg()
 ## inspect default starting values
 initial(pleSegR)(rec(pleSegR), ssb(pleSegR))
 
-## fit
-pleSegR       <-fmle(pleSegR)
-
-## Inspect results
-plot(pleSegR)
-
-## Check fit
-profile(pleSegR)
-
-
-
-#### Hessian
-hessian(her4SR)
-computeHessian(her4SR)
-
-#### compute covariance matrix from inverse of Hessian,
-#### remember it is the negative log likelihood
--solve(computeHessian(her4SR))
-
-#### correlation matrix
-cov2cor(-solve(computeHessian(her4SR)))
-################################################################################
 
 
 
 
 
 #### Bootstrapping ##################################################################
-niter <- 999
-res.boot <- sample(c(residuals(nsher)), niter * dims(nsher)$year, replace=T)
+niter <- 10
+model(pleSR) <- bevholt
+pleSR <- fmle(pleSR)
+res.boot <- sample(c(residuals(pleSR)), niter * dims(pleSR)$year, replace=T)
 
-sr.bt       <- propagate(nsher, niter)
-rec(sr.bt) <- rec(sr.bt)[] + res.boot
-model(sr.bt) <- ricker()
+sr.bt       <- propagate(pleSR, niter)
+rec(sr.bt) <- rec(sr.bt)[] * exp(res.boot)
 
 
 ## fits across all iters independently
-model(sr.bt) <- ricker()
+model(sr.bt) <- bevholt
 sr.bt  <-fmle(sr.bt)
+
+plot(rec(sr.bt))
 
 plot( t(params(sr.bt2)[drop=TRUE]))
 

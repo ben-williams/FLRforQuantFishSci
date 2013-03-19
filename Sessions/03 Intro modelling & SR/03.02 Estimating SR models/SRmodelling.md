@@ -10,6 +10,11 @@ data(ple4)
 ~~~~
 
 
+------------
+
+\includegraphics[width = \textwidth]{reproduction}
+
+
 Ricker stock recruit function
 ------------
 
@@ -17,12 +22,6 @@ Ricker stock recruit function
 \begin{align*}
 \text{Recruitment} = a \times \text{SSB} \times e^{-b \times{SSB} }
 \end{align*}
-
-
-------------
-
-\includegraphics[width = \textwidth]{reproduction}
-
 
 ------------
 
