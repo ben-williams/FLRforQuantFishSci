@@ -56,32 +56,88 @@ install.packages(repos="http://flr-project.org")
 
 ### Intro to FLQuants by Iago
 
-```{r}
+
+```r
 library(FLCore)
 ```
 
-```{r}
+```
+## Loading required package: grid
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: MASS
+```
+
+```
+## FLCore 2.5.0 development version
+```
+
+```
+## Attaching package: 'FLCore'
+```
+
+```
+## The following object(s) are masked from 'package:base':
+## 
+## cbind, rbind
+```
+
+
+
+```r
 # creator for FLQuant
 FLQuant()
+```
+
+```
+## An object of class "FLQuant"
+## , , unit = unique, season = all, area = unique
+## 
+##      year
+## quant 1 
+##   all NA
+## 
+## units:  NA
+```
+
+```r
 # some random thing
-flq <- FLQuant(rnorm(100), dimnames=list(age=1:10, year=1:10))
+flq <- FLQuant(rnorm(100), dimnames = list(age = 1:10, year = 1:10))
 ```
 
-```{r}
+
+
+```r
 # This code doesn't work needs checking ...
-flq <- FLQuant(rnorm(100), dimnames=c(age=1:10, year=1:10))
+flq <- FLQuant(rnorm(100), dimnames = c(age = 1:10, year = 1:10))
 ```
 
-```{r eval=FALSE}
-# This code doesn't work needs checking ...
-flq <- FLQuant(rnorm(100), dimnames=c(age=1:10, year=1:10))
 ```
+## Error: more than one vector of names given for the first dimension
+```
+
+
+
+```r
+# This code doesn't work needs checking ...
+flq <- FLQuant(rnorm(100), dimnames = c(age = 1:10, year = 1:10))
+```
+
 
 Plots are easy, just call plot.
 
-```{r fig.width=7, fig.height=6}
+
+```r
 plot(flq)
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
+
 
 **NOTE:** How can I change the plot ...
 

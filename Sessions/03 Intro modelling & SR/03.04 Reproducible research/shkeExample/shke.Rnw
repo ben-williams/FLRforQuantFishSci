@@ -1,0 +1,486 @@
+\documentclass[a4paper]{article}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=2cm,bmargin=1.5cm,lmargin=2cm,rmargin=3cm}
+%\documentclass[12pt,a5paper]{article}
+%\usepackage{geometry}
+%\geometry{verbose,a5paper,landscape}
+
+\begin{document}
+
+\title{Southern Hake Assessement - EDA and Update Assessment}
+\author{Ernesto Jardim \and Santiago Cervi\~no \and Cristina Morgado}
+\maketitle
+
+\section{Introduction}
+
+This is the Southern Hake Assessment by the ICES WGHMM, draft version 0.5-0 (24/04/2007), made with:
+
+<<>>=
+library(FLCore)
+library(FLAssess)
+library(FLEDA)
+#library(FLSTF)
+library(FLXSA)
+@
+
+\subsection{Reading VPA files}
+
+<<>>=
+# read stock data
+hke07 <- readFLStock("indexhs.low")
+ 
+# because we have no discard data yet,
+# set catch = landings
+catch(hke07) <- landings(hke07)
+catch.n(hke07) <- landings.n(hke07)
+catch.wt(hke07) <- landings.wt(hke07)
+ 
+# set units
+for (i in c("stock.n","catch.n","landings.n","discards.n")) units(slot(hke07,i)) <- "thousands"
+for (i in c("stock.wt","catch.wt","landings.wt","discards.wt")) units(slot(hke07,i)) <- "kg"
+for (i in c("catch","landings","discards")) units(slot(hke07,i)) <- "tonnes"
+units(hke07@harvest)<-"year-1"
+ 
+# read tuning file
+hke07.ind <- readFLIndices("tun06.low")
+ 
+# correct plusgroups due to possible errors when reading the text files
+hke07@range["plusgroup"]<-8
+ 
+# naming the tuning series
+nlst <- lapply(hke07.ind, name)
+# check that the names are valid, in this cases we substitute "-" by "_"
+nlst <- lapply(nlst, gsub, pattern="-", replacement="_")
+names(hke07.ind)<-unlist(nlst)
+rm(nlst)
+
+# adding catch weights to FLindex objects
+# notice that these will be the same for all FLindex objects derived from the catch matrix
+
+hke07.ind <- lapply(hke07.ind, function(x){
+	y <- dimnames(x@catch.wt)$year
+	wt <- trim(hke07@catch.wt,year=y)
+	x@catch.wt <- wt
+	x
+})
+@
+
+Note: the VPA files can not have comments after the year column.
+
+\subsection{Exploratory Data Analysis}
+
+FLEDA includes a combination of simple calculations and graphical representations aiming at data screening (checking for missing data, unusual values, patterns, etc), inspection of data consistency (within and between data series) and extracting signals from the basic data. 
+
+There is an FLEDA [[http://flr-project.org/doku.php?id=pkg:fleda:howto|HowTo]] that provides more details about the exploratory analysis currently implemented for data available for stock assessment.
+
+\subsubsection{catch trends}
+
+<<>>=
+# summary stats
+summary(hke07@catch)
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# fine tune
+ttl <- list(label="Southern Hake total landings", cex=1)
+yttl <- list(label=units(catch(hke07)), cex=0.7)
+xttl <- list(cex=0.7)
+ax <- list(cex=0.7)
+# plot
+print(xyplot(data~year, data=catch(hke07), type="l", main=ttl, ylab=yttl, xlab=xttl, scales=ax))
+@
+
+Since 1983 there was a declining trend in landings, from 22400 t, to the lowest in the series in 2003, around 5600 t. In 2005, total landings increased to around 7400 t, and in 2006 to 10200 t.
+
+\subsubsection{Commercial yield versus effort}
+
+How to get some info about the catchability ?
+
+\subsubsection{Catch at age proportions}
+
+<<fig=TRUE, echo=FALSE>>=
+# compute catch proportion at age
+# see the different exploitation patterns (<1994 , >1994)
+hke07.pay <- pay(catch.n(hke07))
+print(bubbles(age~year, data=hke07.pay, bub.scale=5, main="Proportion at age for Shouthern Hake"))
+@
+
+The plot emphasizes the decrease of the catch proportion at age 1 after 1989, when the MLS was enforced, indicates ages 2 as fully recruited to the fishery and suggests a change in the exploitaion pattern around 1994.
+
+<<fig=TRUE, echo=FALSE>>=
+# fine tune 
+ttl <- list(label="Standardized catch proportion at age for Southern Hake", cex=1)
+yttl <- list(label="age", cex=0.8)
+xttl <- list(cex=0.8)
+ax <- list(cex=0.7)
+
+# plot standardized catch proportion at age
+# notice that we're making use of the "trim" method to compute spay only for the
+# period after 1994
+hke07.spay <- spay(catch.n(hke07)) 
+print(bubbles(age~year, hke07.spay,  main=ttl, ylab=yttl, xlab=xttl, scales=ax, bub.scale=10))
+@
+
+\subsubsection{Abundance indices}
+
+<<>>=
+mv0(FLQuants(lapply(hke07.ind, index)))
+##}=====
+# need to develop mv0(signature("FLIndices") with table output
+##}=====
+@
+
+\subsubsection*{Time series}
+
+<<>>=
+# let's extract the index slot from each FLIndex object in the FLIndices object.
+lst <- lapply(hke07.ind, index)
+# now a nice FLQuants
+hke07.inds <- mcf(lst)
+# scale
+hke07.indsN01 <- lapply(hke07.inds, function(x){
+                  arr <- apply(x@.Data, c(1,3,4,5,6), scale)
+                  arr <- aperm(arr, c(2,1,3,4,5,6))
+                  # small trick to fix an apply "feature"
+                  dimnames(arr) <- dimnames(x)
+                  x <- FLQuant(arr)
+                })
+ 
+hke07.cindsN01 <- hke07.indsN01[c("SP_CORUTR8c_94","P_Tr_95")]
+hke07.cindsN01 <- FLQuants(hke07.cindsN01)
+
+hke07.sindsN01 <- hke07.indsN01[c("SP_GFS", "P_GFS_oct")]
+hke07.sindsN01 <- FLQuants(hke07.sindsN01)
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# plot smoothed commercial indices used in the assessment
+# fine tune
+ttl <- list("Smoothed Standardized Commercial CPUE for Southern Hake", cex=1)
+xttl <- list(cex=0.8)
+yttl <- list("Standardized CPUE", cex=0.8)
+stripttl <- list(cex=0.8)
+ax <- list(cex=0.7)
+#akey <- simpleKey(text=names(hke06.cindsN01), points=F, lines=T, columns=2, cex=0.8)
+akey <- simpleKey(text=c("SP_CORUTR8c_94","P_Tr_95"), points=F, lines=T, columns=2, cex=0.8) # Small fix added by F.Scott Nov. 2006
+# plot
+print(xyplot(data~year|factor(age), data=hke07.cindsN01, type="b", main=ttl, xlab=xttl, ylab=yttl, striptext=stripttl, scales=ax, layout=c(3,3,1), key=akey, pch=20))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# plot survey's indices used in the assessment
+# fine tune
+#akey <- simpleKey(text=names(hke06.sindsN01), points=F, lines=T, columns=2, cex=0.8)
+akey <- simpleKey(text=c("SP_GFS", "P_GFS_oct"), points=F, lines=T, columns=2, cex=0.8)
+ttl <- list("Standardized Surveys CPUE for Southern Hake", cex=1)
+# plot
+print(xyplot(data~year|factor(age), data=hke07.sindsN01, type="b", main=ttl, xlab=xttl, ylab=yttl, striptext=stripttl, scales=ax, layout=c(3,3,1), key=akey, pch=20))
+@
+
+\subsubsection*{Internal consistency}
+
+Look at internal consistency for each fleet.
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"P-TR-95\")", cex=1)
+xttl <- list("age", cex=0.8)
+yttl <- list("age", cex=0.8)
+# panel function
+pfun <- function(x,y,...){
+          panel.splom(x,y, ...)
+          panel.lmline(x,y, lty=1)
+        }
+# plot
+flc <- FLCohort(index(hke07.ind[["P_Tr_95"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"SP-CORUTR8c-94\")", cex=1)
+# plot
+flc <- FLCohort(index(hke07.ind[["SP_CORUTR8c_94"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+<<>>=
+#ttl <- list("Pairwise plot of age by cohort (\"SP-CORUTRP8c-94\")", cex=1)
+# plot
+#flc <- FLCohort(index(hke07.ind[["SP_CORUTRP8c_94"]]))
+#print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+cat("Error with \"SP-CORUTRP8c-94\"\n")
+@
+
+<<>>=
+#ttl <- list("Pairwise plot of age by cohort (\"SP-SANTR\")", cex=1)
+# plot
+#flc <- FLCohort(index(hke07.ind[["SP_SANTR"]]))
+#print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+cat("Error with \"SP-SANTR\"\n")
+@
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"SP-VIMATR\")", cex=1)
+# plot
+flc <- FLCohort(index(hke07.ind[["SP_VIMATR"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"SP-GFS\")", cex=1)
+# plot
+flc <- FLCohort(index(hke07.ind[["SP_GFS"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"P-GFS-jul\")", cex=1)
+# plot
+flc <- FLCohort(index(hke07.ind[["P_GFS_jul"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+ttl <- list("Pairwise plot of age by cohort (\"P-GFS-oct\")", cex=1)
+# plot
+flc <- FLCohort(index(hke07.ind[["P_GFS_oct"]]))
+print(splom(~data, data=flc, panel=pfun, pscales=0, main=ttl, xlab=xttl, ylab=yttl, pch=19, cex=0.3))
+@
+
+
+%Now let's see the correlation matrix.
+
+%<<>>=
+%lst <- lapply(hke07.ind, index)
+%lapply(lst, cor)
+%@
+
+\subsubsection{Biomass}
+
+<<fig=TRUE, echo=FALSE>>=
+# weight at age
+ttl <- list(label="Catch weight at age for southern hake", cex=1)
+yttl <- list(label=units(hke07@catch.wt), cex=0.8)
+xttl <- list(cex=0.8)
+ax <- list(cex=0.7)
+# plot
+print(xyplot(data~year|unit, data=catch.wt(hke07) , groups=age, type="l", lty=1:15, col=1, main=ttl, ylab=yttl, xlab=xttl, scales=ax))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# maturity
+ttl <- list(label="Maturity ogive for southern hake", cex=1)
+yttl <- list(label="%", cex=0.8)
+xttl <- list(cex=0.8)
+stripttl <- list(cex=0.7)
+ax <- list(x=list(tick.number=7, cex=0.7), y=list(cex=0.7))
+# legend
+# plot
+print(xyplot(data~age|as.factor(year), data=mat(hke07), type="b", main=ttl, ylab=yttl, xlab=xttl, scales=ax, pch=20))
+@
+
+\subsubsection*{trends}
+These are computed from the catch at age matrix but similar analysis can be performed using survey abundance data. 
+
+<<fig=TRUE, echo=FALSE>>=
+hke07.bmass <- bmass(hke07)
+# tune plot
+ttl <- list(label="Trends in biomass for mature and immature southern hake", cex=1)
+yttl <- list(label="relative biomass", cex=0.8)
+xttl <- list(cex=0.8)
+ax <- list(cex=0.8)
+akey <- simpleKey(text=c("mature", "immature"), points=F, lines=T)
+# plot
+print(xyplot(data~year, data=hke07.bmass, type="l", main=ttl, key=akey, ylab=yttl, xlab=xttl, scales=ax))
+@
+
+Trend analysis of the mature component of the stock indicates a sharp decrease from mid 80´s to late 90´s being currently at low levels. Note that in this stock the immature are not well sampled due to minimum landing size, so age 0 in the catch at age matrix was replaced by "0".
+
+\subsubsection{Total mortality}
+
+\subsubsection*{catch curves}
+
+<<fig=TRUE, echo=FALSE>>=
+hke07.cc <- logcc(catch.n(hke07))
+# fine tune plot
+ttl <- list(label="Log catch curves for southern hake", cex=1)
+yttl <- list(label="log ratio", cex=0.8)
+xttl <- list(cex=0.8)
+stripttl <- list(cex=0.8)
+ax <- list(cex=0.7)
+# plot
+print(ccplot(data~age|unit, data=trim(hke07.cc, cohort=1994:2003), type="l", main=ttl, ylab=yttl, xlab=xttl, scales=ax, par.strip.text=stripttl, groups="cohort"))
+@
+
+\subsubsection*{trends}
+
+<<>>=
+# compute Z
+hke07z <- z(catch.n(hke07), agerng=2:5)
+@
+
+<<>>=
+summary(hke07z)
+t.test(hke07z)
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# tune plot
+ttl <- list("Total mortality (Z) for southern hake", cex=1)
+xttl <- list(cex=0.8)
+yttl <- list("Mean Z", cex=0.8)
+# plot z by age along years
+print(xyplot(data~year, data=hke07z@zy, type="l", main=ttl, ylab=yttl, xlab=xttl))
+@
+
+Despite the underlying assumptions in the computation of mean Z the catch at age data indicates average total mortality since 1982 of around 0.7(note that natural mortality for the southern hake is assumed constant at 0.2). Mortality seems to have been the lowest in 1982 and 1993-1994 and the highest in 1995. 
+
+\subsection{Assessment with VPA}
+
+\subsubsection{XSA}
+
+Following previous years decisions the catch matrix at age 0 will be replaced by 0. 
+
+<<>>=
+hke07.0 <- hke07
+hke07.0@catch.n["0"] <- 0
+hke07.0@landings.n["0"] <- 0
+@
+
+<<>>=
+# XSA control
+hke07.xsactl <- FLXSA.control(fse = 0.8, rage = -1, qage = 6, shk.n = FALSE, shk.f = TRUE, 
+shk.yrs = 5, shk.ages = 4, window = 100, tsrange = 100, tspower = 0, vpa = FALSE)
+
+# Selecting the fleets
+
+hke07.ind00 <- hke07.ind[c(2,3,4,9,11)]
+hke07.ind00[["P_Tr_95"]]@range[] <- c(2,8,8,1995,2006,0,1)
+hke07.ind00[["SP_CORUTR8c_85"]]@range[] <- c(2,8,8,1985,1993,0,1)
+hke07.ind00[["SP_CORUTR8c_94"]]@range[] <- c(3,8,8,1994,2006,0,1)
+hke07.ind00[["SP_GFS"]]@range[] <- c(0,4,NA,1983,2006,0.75,0.83)
+hke07.ind00[["P_GFS_oct"]]@range[] <- c(0,4,NA,1989,2006,0.83,0.92)
+
+# VPA 
+hke07.xsa <- FLXSA(hke07.0, hke07.ind00, hke07.xsactl)
+
+# hack to overcome bug in FLXSA
+names(hke07.xsa@index) <- names(hke07.ind00)
+names(hke07.xsa@index.res) <- names(hke07.ind00)
+names(hke07.xsa@index.hat) <- names(hke07.ind00)
+names(hke07.xsa@index.var) <- names(hke07.ind00)
+
+# updated stock object
+hke07.0 <- hke07.0+hke07.xsa
+@
+
+\subsubsection{Diagnostics}
+
+If you want to inspect the diagnostics //old style// use
+
+<<>>=
+#diagnostics(hke07.xsa)
+@
+
+The residuals plots and retrospective are below.
+<<fig=TRUE, echo=FALSE>>=
+# residuals
+flqs <- mcf(hke07.xsa@index.res)
+# bug overcome in FLQuants creator
+names(flqs) <- names(hke07.ind00)
+print(bubbles(as.factor(age)~year|qname, data=flqs, bub.scale=5, main="Log catchability residuals by fleet"))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# residuals time series
+xttl <- list(cex=0.8)
+yttl <- list("logq residuals", cex=0.8)
+stripttl <- list(cex=0.8)
+ax <- list(cex=0.7)
+akey <- simpleKey(text=as.character(0:8), points=F, lines=T, columns=3, cex=0.8)
+ttl <- list("Log catchability residuals by fleet", cex=1)
+
+pfun <- function(x,y, ...){
+	panel.xyplot(x,y,...)
+	panel.abline(h=0, lty=2)
+}
+
+print(xyplot(data~year|qname, groups=age, data=hke07.xsa@index.res, type="l", key=akey, main=ttl, xlab=xttl, ylab=yttl, par.strip.text=stripttl, scales=ax, panel=pfun))
+@
+
+<<fig=TRUE, echo=FALSE>>=
+# retro
+hke07.retro <- retro(hke07.0, hke07.ind00, hke07.xsactl, retro=5)
+print(plot(hke07.retro, main="Retrospective analysis for southern hake"))
+@
+
+%\subsubsection{Summary}
+
+%<<fig=TRUE, echo=FALSE>>=
+%# summary table
+%hke07.summary <- summary(hke07.xsa, stock=hke07.0, R.age="0", Fbar.rng=as.character(2:5))
+
+%# summary plot
+%nms <- rep(names(hke07.summary), rep(25,4))
+%dta <- unlist(hke07.summary)
+%yrs <- as.numeric(row.names(hke07.summary))
+%df0 <- data.frame(nms, yrs, dta)
+%print(xyplot(dta~yrs|nms, data=df0, scales=list(relation="free"), ylab="", type="b", main="Summary plot for Southern Hake assessment", pch=20))
+%@
+
+\subsection{S/R}
+
+<<fig=TRUE, echo=FALSE>>=
+hke07.sr <- as.FLSR(hke07.0, model="ricker")
+hke07.sr <- sr(hke07.sr)
+plot(hke07.sr)
+@
+
+%\subsection{Biological reference points}
+
+%\subsection{Short Term Forecast}
+
+%\subsubsection*{At F status quo.}
+
+%<<>>=
+%hke07.projctl <- FLSTF.control(fbar.min=2, fbar.max=5, rec=as.numeric(NA), rec.yrs=c(1989, 2005), 
+%f.rescale=T, nyrs=10)
+%hke07.proj <- FLSTF(hke07.0, hke07.projctl)
+%@
+
+%The summary plot can be produced again, after small adjustements.
+
+%<<fig=TRUE, echo=FALSE>>=
+%yield <- quantSums(catch.n(hke07.proj)*catch.wt(hke07.proj))
+%Fbar <- quantMeans(harvest(hke07.proj)[c("2","3","4","5"),,,,])
+%R <- stock.n(hke07.proj)["0",,,,]
+%ssb <- ssb(hke07.proj)
+
+%hke07.psumm <- list("Yield(t)"=yield, "Fbar(ages 2-5, year-1)"=Fbar, "R(age=0, millions)"=R, "SSB(t)"=ssb)
+%dl0 <- data.list(hke07.psumm)
+
+%print(xyplot(data~year|qname, data=dl0, scales=list(relation="free"), ylab="", type="b", main="Forecast for 10 years at F status quo", pch=20))
+%@
+
+%\subsubsection*{Using the 10\% reduction in F as proposed by the recovery plan.}
+
+%<<>>=
+%hke07.projctl <- FLSTF.control(fbar.min=2, fbar.max=5, rec=as.numeric(NA), rec.yrs=c(1989, 2005), fmult=seq(1,0.3/hke07.summary["2006",2],length.out=10), nyrs=10)
+%hke07.proj <- FLSTF(hke07.0, hke07.projctl)
+%@
+
+%The summary plot can be produced again, after small adjustments.
+
+%<<fig=TRUE, echo=FALSE>>=
+%yield <- quantSums(catch.n(hke07.proj)*catch.wt(hke07.proj))
+%Fbar <- quantMeans(harvest(hke07.proj)[c("2","3","4","5"),,,,])
+%R <- stock.n(hke07.proj)["0",,,,]
+%ssb <- ssb(hke07.proj)
+
+%hke07.psumm <- list("Yield(t)"=yield, "Fbar(ages 2-5, year-1)"=Fbar, "R(age=0, millions)"=R, "SSB(t)"=ssb)
+%dl0 <- data.list(hke07.psumm)
+
+%print(xyplot(data~year|qname, data=dl0, scales=list(relation="free"), ylab="", type="b", main="Forecast for 3 years with 10\% F reduction", pch=20))
+%@
+
+\end{document}
+

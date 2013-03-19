@@ -12,7 +12,7 @@ install.packages("FLBioDym", repos="http://flr-project.org/Rdevel")
 # FLBioDym
 
 * Pella-Tomlinson (generalizes biomass dynamic models)
-    * pelat: B[t+1] = B[t] + r/p*B[t]*(1-(B[t]/k)^p)) - C[t]
+    * B[t+1] = B[t] + r/p*B[t]*(1-(B[t]/k)^p)) - C[t]
     * Schaeffer with $p=1$
     * Fox with $p \sim 0$
 
@@ -32,10 +32,53 @@ plot(ple4.bd)
 
 # Fitting
 
-bounds(ple4.bd)
-ple4.bd@bounds
-ple4.bd@bounds["r", c("lower", "upper", "start")] <- c(0.1,0.4,0.2)
-ple4.bd@bounds["k", "start"] <- c(max(catch(ple4))*2)
+```{r}
+bounds(ple4.bd) # ple4.bd@bounds
+ple4.bd@bounds[, "start"] <- 1
+ple4.bd@bounds[, "lower"] <- 0.1
+ple4.bd@bounds[, "upper"] <- 1e8
+ple4.bd <- admbBD(ple4.bd)
+```
 
+```{r fig.width=7, fig.height=6}
+plot(ple4.bd)
+```
 
+# A bit more on fitting
+
+```{r}
+# trying different starting values and boundaries
+bounds <- bounds(ple4.bd)
+bounds["r",    "start"]=0.1
+bounds["k",    "start"]=max(catch(ple4.bd))*3
+bounds["sigma","start"]=0.5
+bounds["q",    "start"]=1.0
+bounds["b0",   "start"]=0.2
+bounds["p",    "start"]=1
+bounds[,"lower"]=bounds[,"start"]*0.1
+bounds[,"upper"]=bounds[,"start"]*10.0
+ple4.bd@bounds <- bounds
+ple4.bd <- admbBD(ple4.bd)
+params(ple4.bd)
+```
+
+Still a bit doggy ... some parameters are everywhere and others are not moving much. The problem is that we're trying to estimate too many parameters. We need to fix some of them !!
+
+# Playing with phase
+
+```{r}
+# trying different starting values and boundaries
+bounds["p",    "phase"]=-1
+ple4.bd@bounds <- bounds
+ple4.bd <- admbBD(ple4.bd)
+params(ple4.bd)
+```
+
+```{r fig.width=7, fig.height=6}
+plot(ple4.bd)
+```
+
+# Exercise
+
+Please do better and let me know ...
 

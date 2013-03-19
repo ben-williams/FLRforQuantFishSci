@@ -3,4 +3,36 @@ VPA and XSA models with FLAssess and FLXSA
 Ispra, 18th - 22nd March, 2013
 -------------------------
 
+```{r}
+library(FLAssess)
+data(ple4)
+harvest(ple4)[ac(range(ple4)["max"]), ] <- 1
+harvest(ple4)[, ac(range(ple4)["maxyear"])] <- 1
+ple4.vpa <- VPA(ple4, fratio = 1, fit.plusgroup = T)
+```
+
+
+```{r fig.width=7, fig.height=6}
+plot(FLStocks(ple4=ple4, vpa=ple4new))
+```
+
+
+```{r}
+setFinal <- function(object, val){
+  harvest(object)[ac(range(object)["max"]), ] <- val
+  harvest(object)[, ac(range(object)["maxyear"])] <- val
+  object
+}
+```
+
+```{r}
+finals <- seq(0.5,1.5,0.1)
+lst <- lapply(as.list(finals), setFinal, object=ple4)
+lst <- lapply(lst, VPA, fratio=1)
+stks <- lapply(lst, "+", ple4)
+```
+
+```{r fig.width=7, fig.height=6}
+plot(FLStocks(stks))
+```
 
