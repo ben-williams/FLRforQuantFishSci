@@ -16,60 +16,52 @@ data(ple4)
 # stock numbers
 stock.n(ple4)
 
-# weight at age and maturity at age
-rec(ple4)
+# SSB and recruitment
 ssb(ple4)
+
+rec(ple4)
 
 #### Creation from an FLStock
 
 pleSR <-as.FLSR(ple4)
 
+summary(pleSR)
+
+
 ### Note the shift in years, reflecting that recruitment is at age 1 in the ple4
-ssb(ple4SR)
-rec(ple4SR)
+ssb(pleSR)
+rec(pleSR)
 
-summary(ple4SR)
-################################################################################
 
-# Let's look at the FLSR class
-summary(nsher)
 
-## lets look at the contents
-# recruitment
-rec(nsher)
+# what if we want to investigate the recruitment at age 2?
+pleSR2 <-as.FLSR(ple4[-1])
 
-# ssb
-ssb(nsher)
+### Note the shift in years, reflecting that recruitment is now at age 2
+ssb(pleSR2)
+rec(pleSR2)
 
+plot(ssb(pleSR), rec(pleSR))
+
+
+
+## fitting a SR relationship
+
+
+model(pleSR) <- ricker()
 
 #### Model and likelihood are functions of the FLSR class
-model(nsher)
-logl(nsher)
+model(pleSR)
 
 #### initial values for the optimiser
-initial(nsher)
+initial(pleSR)
 
 #### lower and upper limits for the parameters
-lower(nsher)
-upper(nsher)
+lower(pleSR)
+upper(pleSR)
 
-### where did these come from
-ricker()
 
 ################################################################################
-
-# set the SRR model as Ricker
-model(nsher) <- ricker()
-
-# ricker() contains everything needed to fit a non-linear model
-# a formula for the model
-ricker()$model
-
-# the loglikehood function
-ricker()$logl
-
-# a function for initial values
-ricker()$initial
 
 # other stock recruitment functional forms exist
 bevholt()
@@ -84,20 +76,78 @@ bevholtAR1()
 
 
 # the fmle method then fits the SRR using logl and R's optim
-nsher <- fmle(nsher)
+pleSR <- fmle(pleSR)
+
+plot(pleSR)
+
+
+################################################################################
+
+# Let's look something with a better relationship
+data(nsher)
+
+plot(ssb(nsher), rec(nsher))
+
+summary(nsher)
 
 
 
-# plot, summaries model fit and diagnostics
-plot(nsher)
+###################
+## DO Exercise 1
+###################
+
+
+
+
+
+
+
+
+
+# prediction
+
+newssb <- FLQuant(seq(1, 500000, length = 100))
+newrec <- predict(pleSR, ssb = newssb)
+
+plot(ssb(pleSR), rec(pleSR))
+lines(newssb, newrec)
+
+
+
+
+
+
+
+
+###################
+## DO Exercise 2
+###################
+
+
+
+
+
+
+# fixing parameters
+
+model(pleSR) <- bevholt
+
+pleSR <- fmle(pleSR, fixed = list(a = 100000))
+
+plot(pleSR)
+
+
+
+
+
+
+# some other stuff
 
 # Profile the likelihood to check the fit
 # for a 2-parameter model like Riker, profiles over a range of 2 values
 # around MLE estimate
 profile(nsher)
 
-# fmle also allows individual parameters to be fixed
-nsherFixed <- fmle(nsher, fixed=list(a=130))
 
 # methods exist for Akaike Information Criterion
 AIC(nsher)
@@ -106,17 +156,6 @@ AIC(nsherFixed)
 
 BIC(nsher)
 BIC(nsherFixed)
-
-# predict uses the formula and parameter values to get a predicted recruitment
-predict(nsher)
-
-# which also be called with a new input ssb
-predict(nsher, ssb=ssb(nsher)*1.5)
-
-
-
-
-
 
 
 
@@ -142,23 +181,6 @@ model(ple4SR)<-bevholt()
 ple4SR<-as.FLSR(ple4,model="bevholt")
 ################################################################################
 
-#### fitting
-
-## copy object
-nsherRK       <-nsher
-
-## choose SRR
-model(nsherRK)<-ricker()
-
-system.time(badFit        <-fmle(nsherRK, start=c(a=1,b=2)))
-
-system.time(nsherRK       <-fmle(nsherRK))
-
-
-
-#### plot fit and diagnostics
-plot(nsherRK)
-################################################################################
 
 # parameter values can also be fixed
 nsherRKFixed  <-fmle(nsherRK, fixed=list(a=63580373))
@@ -200,47 +222,28 @@ model(pleSegR)<-segreg()
 ## inspect default starting values
 initial(pleSegR)(rec(pleSegR), ssb(pleSegR))
 
-## fit
-pleSegR       <-fmle(pleSegR)
-
-## Inspect results
-plot(pleSegR)
-
-## Check fit
-profile(pleSegR)
-
-
-
-#### Hessian
-hessian(her4SR)
-computeHessian(her4SR)
-
-#### compute covariance matrix from inverse of Hessian,
-#### remember it is the negative log likelihood
--solve(computeHessian(her4SR))
-
-#### correlation matrix
-cov2cor(-solve(computeHessian(her4SR)))
-################################################################################
 
 
 
 
 
 #### Bootstrapping ##################################################################
-niter <- 999
-res.boot <- sample(c(residuals(nsher)), niter * dims(nsher)$year, replace=T)
+niter <- 10
+model(pleSR) <- bevholt
+pleSR <- fmle(pleSR)
+res.boot <- sample(c(residuals(pleSR)), niter * dims(pleSR)$year, replace=T)
 
-sr.bt       <- propagate(nsher, niter)
-rec(sr.bt) <- rec(sr.bt)[] + res.boot
-model(sr.bt) <- ricker()
+sr.bt       <- propagate(pleSR, niter)
+rec(sr.bt) <- rec(sr.bt)[] * exp(res.boot)
 
 
 ## fits across all iters independently
-model(sr.bt) <- ricker()
+model(sr.bt) <- bevholt
 sr.bt  <-fmle(sr.bt)
 
-plot( t(params(sr.bt2)[drop=TRUE]))
+plot(rec(sr.bt))
+
+plot( t(params(sr.bt)[drop=TRUE]))
 
 ################################################################################
 
