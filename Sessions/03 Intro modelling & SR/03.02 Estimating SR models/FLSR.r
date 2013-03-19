@@ -16,7 +16,7 @@ data(ple4)
 # stock numbers
 stock.n(ple4)
 
-# weight at age and maturity at age
+# SSB and recruitment
 ssb(ple4)
 
 rec(ple4)
@@ -44,51 +44,24 @@ rec(pleSR2)
 plot(ssb(pleSR), rec(pleSR))
 
 
-################################################################################
 
-# Let's look something with a better relationship
-data(nsher)
+## fitting a SR relationship
 
-plot(ssb(nsher), rec(nsher))
 
-summary(nsher)
-
-## lets look at the contents
-# recruitment
-rec(nsher)
-
-# ssb
-ssb(nsher)
-
+model(pleSR) <- ricker()
 
 #### Model and likelihood are functions of the FLSR class
-model(nsher)
-logl(nsher)
+model(pleSR)
 
 #### initial values for the optimiser
-initial(nsher)
+initial(pleSR)
 
 #### lower and upper limits for the parameters
-lower(nsher)
-upper(nsher)
+lower(pleSR)
+upper(pleSR)
 
-### where did these come from
-ricker()
 
 ################################################################################
-
-# set the SRR model as Ricker
-model(nsher) <- ricker()
-
-# ricker() contains everything needed to fit a non-linear model
-# a formula for the model
-ricker()$model
-
-# the loglikehood function
-ricker()$logl
-
-# a function for initial values
-ricker()$initial
 
 # other stock recruitment functional forms exist
 bevholt()
@@ -103,20 +76,78 @@ bevholtAR1()
 
 
 # the fmle method then fits the SRR using logl and R's optim
-nsher <- fmle(nsher)
+pleSR <- fmle(pleSR)
+
+plot(pleSR)
+
+
+################################################################################
+
+# Let's look something with a better relationship
+data(nsher)
+
+plot(ssb(nsher), rec(nsher))
+
+summary(nsher)
 
 
 
-# plot, summaries model fit and diagnostics
-plot(nsher)
+###################
+## DO Exercise 1
+###################
+
+
+
+
+
+
+
+
+
+# prediction
+
+newssb <- FLQuant(seq(1, 500000, length = 100))
+newrec <- predict(pleSR, ssb = newssb)
+
+plot(ssb(pleSR), rec(pleSR))
+lines(newssb, newrec)
+
+
+
+
+
+
+
+
+###################
+## DO Exercise 2
+###################
+
+
+
+
+
+
+# fixing parameters
+
+model(pleSR) <- bevholt
+
+pleSR <- fmle(pleSR, fixed = list(a = 100000))
+
+plot(pleSR)
+
+
+
+
+
+
+# some other stuff
 
 # Profile the likelihood to check the fit
 # for a 2-parameter model like Riker, profiles over a range of 2 values
 # around MLE estimate
 profile(nsher)
 
-# fmle also allows individual parameters to be fixed
-nsherFixed <- fmle(nsher, fixed=list(a=130))
 
 # methods exist for Akaike Information Criterion
 AIC(nsher)
@@ -126,11 +157,6 @@ AIC(nsherFixed)
 BIC(nsher)
 BIC(nsherFixed)
 
-# predict uses the formula and parameter values to get a predicted recruitment
-predict(nsher)
-
-# which also be called with a new input ssb
-predict(nsher, ssb=ssb(nsher)*1.5)
 
 
 
@@ -217,7 +243,7 @@ sr.bt  <-fmle(sr.bt)
 
 plot(rec(sr.bt))
 
-plot( t(params(sr.bt2)[drop=TRUE]))
+plot( t(params(sr.bt)[drop=TRUE]))
 
 ################################################################################
 
