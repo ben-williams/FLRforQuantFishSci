@@ -36,3 +36,80 @@ stks <- lapply(lst, "+", ple4)
 plot(FLStocks(stks))
 ```
 
+# XSA
+
+library(FLCore), library(FLXSA), library(plyr)
+
+# load the Flstock data
+data(ple4)
+
+# and load the FLIndex
+data(ple4.indices)
+
+# check if there are Na's or strange values like 99 and replace them
+# none in the plaice case, but alwasys good to check
+
+# have a first look at the plot
+plot(ple4)
+plot(ple4.indices)
+
+# compute discards  and catch in tonnes and plot again
+ple4 <- transform(ple4, discards=computeDiscards(ple4), catch=computeCatch(ple4))
+plot(ple4)
+# alternatively we choose to plot landings and catches, the difference between these lines is discards
+
+ple4.tun.sel  <- FLIndices(trim(ple4.indices[[1]],age=2:8), ple4.indices[[2]],
+  												 trim(ple4.indices[[3]], year=1997:2003))
+names(ple4.tun.sel) <- names(ple4.indices)
+ple4.sel  <- setPlusGroup(ple4, plusgroup=10)
+
+# set up the control file for XSA
+# set the controls
+xsa.control  <- FLXSA.control(tol = 1e-09, maxit = 30,  min.nse = 0.3,  fse  = 2.0,
+															rage = -1,   qage  = 6,   shk.n   = TRUE, shk.f = TRUE,
+															shk.yrs = 5, shk.ages= 2, window  = 100,  tsrange = 99,
+															tspower = 0) 
+
+# Do the XSA assessment
+xsa.results         <- FLXSA( ple4.sel, ple4.tun.sel, xsa.control)
+
+
+# now have a look at the XSA diagnostics
+diagnostics(xsa.results)
+
+#Catchability Residuals
+names(index.res(xsa.results))<- lapply(ple4.tun.sel,'name')
+bubbles(age~year|qname, data=mcf(index.res(xsa.results)))
+
+# incorporate results of XSA in FLQuant of ple4
+ple4.sel <- ple4.sel + xsa.results
+plot(ssb(ple4.sel))
+
+# run a retropsective analysis
+# what does it mean?
+
+ple4 <- ple4+FLXSA(ple4,ple4.indices,FLXSA.control())
+retro.years <- 2004:2008
+ple4.retro  <-tapply(retro.years,1:length(retro.years),function(x)
+return(window(ple4,end=x)+FLXSA(window(ple4,end=x),ple4.indices)))
+
+# coerce into FLStocks object
+ ple4.retro <- FLStocks(ple4.retro)
+# full retrospective summary plot
+ plot(ple4.retro)
+
+# retro for SSB
+ylab <- 'SSB'
+xlab <- 'Year'
+mainttl <- 'SSB retrospective'
+xyplot(data~year,groups=qname,data=lapply(ple4.retro,ssb),xlab=xlab,ylab=ylab,main=mainttl,type="l")
+
+# FBAR
+ylab <- expression(bar(F))
+xlab <- 'Year'
+mainttl <- 'mean F retrospective'
+xyplot(data~year,groups=qname,data=lapply(ple4.retro,fbar),xlab=xlab,ylab=ylab,main=mainttl,type="l")
+
+
+
+
