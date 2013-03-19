@@ -41,3 +41,8 @@ Ispra, 18th - 22nd March, 2013
     * Explore your models
     * Fast and intuitive
 
+# Teach yourself FLR
+
+http://tyflr.flr-project.org
+
+
