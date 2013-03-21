@@ -177,7 +177,7 @@ Before cooking, we need to some preparation with the stock object...
 Two arguments to `fwd()` we have not used yet
 
 * sr.residuals - `FLQuant` of residuals
-* sr.residuals.mult - Are the residuals multiplicative or additive
+* sr.residuals.mult - The residuals are multiplicative or additive
 
 We need to make an `FLQuant` of residuals...
 

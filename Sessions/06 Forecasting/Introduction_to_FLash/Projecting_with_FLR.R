@@ -30,8 +30,8 @@ data(ple4)
 # http://www.cakewrecks.com/
 
 # There are three necessary ingredients when projecting in FLR
-#     stock object - that you will forecast and about which you have made some assumptions about what will happen in the future 
-#     a stock-recruitment relationship - FLSR
+#     stock object - that you will forecast and about which you have made some assumptions about what will happen in the future
+#     a stock-recruitment relationship
 #     projection control - specify what targets and when to hit them
 
 # In FLR, there is a method fwd()
@@ -44,10 +44,11 @@ data(ple4)
 # Ingredient 1 - the stock
 #---------------------------------------------------------------
 
+summary(ple4)
 # Our ple4 stock goes up to 2008
-# We want to make a 3 year projection
+# In this example we want to make a 3 year projection
 # So we need to extend the stock by 3 years
-# We could use trim() but that makes all future data NA
+# We could use window() or trim() but that makes all future data NA
 # Instead we use the stf() function (short term forecast)
 # This has several options that allow you to control the assumptions about the future
 ?stf
@@ -83,7 +84,7 @@ plot(ple4_sr)
 # Healthy and delicious
 
 # Remember that all we can 'manage' in the fishery is the level of fishing mortality
-# Here we do this directly
+# Here we do this directly by setting F in future years
 # Set F in the future years to be the same as the mean of the last 5 years
 f_future <- mean(fbar(ple4)[,as.character(2004:2008)])
 
@@ -92,6 +93,7 @@ f_future <- mean(fbar(ple4)[,as.character(2004:2008)])
 #   The year the F target is to be hit (!)
 #   The quantity (or type) of the target
 #   The value of the target
+#   Some other things that we will ignore for now
 # Make the data.frame
 ctrl_target <- data.frame(year = 2009:2011,
 			  quantity = "f",
@@ -106,21 +108,26 @@ ctrl_f
 # Also there is another table underneath - ignore this for now
 
 # Importante!
-# The year is the year that F will be set to hit the target 
+# Remember that we can only really control F
+# The year in the fwdControl object is the year that F will be set to hit your target 
 # This is true for all target types - this will become clear later
 
 # What else do we have?
 slotNames(ctrl_f)
+# Ignore the block, effort and effArray slots, we won't use them today
+# After all, we're only making flapjack
+# The trgtArray we will eventually come to - but ignore it for now
 # What is this target slot?
 ctrl_f@target
 # What are all these columns - panic!
-# Simplest thing at the moment is to ignore those slots
-# After all, we're only making flapjack
+
+
 
 # Run fwd() with our three ingredients
 ple4_fwd_f <- fwd(ple4_stf, ctrl = ctrl_f, sr = ple4_sr)
 # What just happened?
 fbar(ple4_fwd_f)
+f_future
 ssb(ple4_fwd_f)
 plot(window(ple4_fwd_f, start = 1991, end = 2011))
 
@@ -129,8 +136,10 @@ plot(window(ple4_fwd_f, start = 1991, end = 2011))
 #---------------------------------------------------------------
 # Another recipe which does not require baking
 # These cakes should be eaten hot, straight from the griddle
+# A cold Welsh cake is a friend to no-one
 
 # Here we set catch as the target
+# We can use to explore the consequences of different TAC strategies
 catch(ple4_stf)
 # Plan is to reduce the catch by 10% each year
 future_catch <- c(catch(ple4)[,"2008"]) * 0.9^(1:3)
@@ -155,7 +164,7 @@ plot(window(ple4_fwd_catch, start = 1991, end = 2011))
 # Here we set SSB as the target
 
 ssb(ple4_stf)
-# We want the future SSB to be high
+# We want the future SSB to be high (we could have used FLBRP to come up with a suitable value, e.g. Bmsy but here we just pick a value)
 future_ssb <- 300000
 ctrl_ssb <- fwdControl(data.frame(year=2009:2011, quantity = "ssb", val=future_ssb))
 ctrl_ssb
@@ -164,11 +173,11 @@ ple4_fwd_ssb <- fwd(ple4_stf, ctrl_ssb, sr = ple4_sr)
  
 # Remember - 
 # the target year in the control object is the year that F is set
-# SSB in year y depends on F in y-1
+# SSB in year Y depends on F in Y-1
+# In the above control object what we actually did was to find the F in 2011 that will hit a target SSB. But this target SSB will not happen until 2012. 
+# But our stock doesn't go to 2012 - so we get an error
 # So to hit the SSB target in 2009:2011, we need to set target year as 2008:2010 
 
-# The above control object tries to find the F in 2011 to hit SSB in 2012
-# But our stock doesn't go to 2012 - so we get an error
 # Try again but change the target year
 ctrl_ssb <- fwdControl(data.frame(year=2008:2010, quantity = "ssb", val=future_ssb))
 ctrl_ssb
@@ -186,6 +195,8 @@ plot(window(ple4_fwd_ssb, start = 1991, end = 2011))
 # And because our target is SSB in 2011, catch is not calculated for 2011
 # This is why catch is 0 in 2011
 # You can ignore catcb and F in 2011 
+# Or just plot until 2010
+plot(window(ple4_fwd_ssb, start = 1991, end = 2010))
 
 #---------------------------------------------------------------
 # Recipe 4 - Cupcake
@@ -196,6 +207,8 @@ plot(window(ple4_fwd_ssb, start = 1991, end = 2011))
 # We now introduce the idea of RELATIVE values
 # This allows us to set the target value RELATIVE to the value in another year
 
+# Here we set catches relative to the catch value in another year
+
 ctrl_rel_catch <- fwdControl(
 	data.frame(year = 2009:2011,
 		   quantity = "catch",
@@ -204,12 +217,13 @@ ctrl_rel_catch <- fwdControl(
 # Note the introduction of the rel.year column
 # This means that we want the value in 2009 to be 0.9 * value in 2008 etc
 ctrl_rel_catch
+# An extra column has appeared!
 # Put it into fwd()
 ple4_fwd_rel_catch <- fwd(ple4_stf, ctrl_rel_catch, sr = ple4_sr)
 catch(ple4_fwd_rel_catch)
 plot(window(ple4_fwd_rel_catch, start = 1991, end = 2011))
 
-# This is the same result as Recipe 3, but in Recipe 3 we had to set the catch value in advance
+# This is the same result as Recipe 3, but in Recipe 3 we had to set the absolute catch values in advance
 
 #---------------------------------------------------------------
 # Recipe 5 - Clootie Dumpling
@@ -225,14 +239,13 @@ plot(window(ple4_fwd_rel_catch, start = 1991, end = 2011))
 # Fishers will not like this
 # So we can set a MINIMUM value to the catch. 
 # This means that fwd() will try to find the F that will result in our target SSB, but will be constrained by catch having a minimum value.
-# SSB = bpa, but TAC >= mean of last 3
 
-# We'll set out minimum catch as the mean catch of the last 3 years
+# We'll set our minimum catch to be the mean catch of the last 3 years
 min_catch <- mean(catch(ple4_stf)[,as.character(2006:2008)])
 # And keep our target SSB as before
 future_ssb <- 300000
 
-# Remember: Setting SSB requires shifting back a year
+# Remember: Setting SSB requires shifting back the target year
 
 # Molto importante!
 # Be careful with order of data.frame
@@ -247,6 +260,8 @@ ctrl_ssb_min_catch
 ple4_fwd_ssb_min_catch <- fwd(ple4_stf, ctrl_ssb_min_catch, sr = ple4_sr)
 ssb(ple4_fwd_ssb_min_catch)
 catch(ple4_fwd_ssb_min_catch) 
+# Again, ignore Catch and F in the final year of the plot
+# The projection only goes up to the start of 2011
 plot(window(ple4_fwd_ssb_min_catch, start = 1991, end = 2011))
 				       
 #---------------------------------------------------------------
@@ -260,7 +275,7 @@ plot(window(ple4_fwd_ssb_min_catch, start = 1991, end = 2011))
 # Instead of a 3 year projection, now we are going up to 2014
 
 yrs <- 2009:2014
-# Set a value for f0.1
+# Set a value for f0.1 - should have used FLBRP but...
 f0.1 <- 0.09
 ple4_stf_long <-stf(ple4, length(yrs))
 
@@ -294,7 +309,7 @@ plot(window(recovery, start = 1991, end = 2014))
 # Prepare yourself! Because we are about to enter the 6th Dimension...
 
 #---------------------------------------------------------------
-# Lunch
+# Mangiamo
 #---------------------------------------------------------------
 
 # fwd() is happy to work over iterations.
