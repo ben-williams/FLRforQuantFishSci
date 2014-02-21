@@ -26,6 +26,7 @@
 │   └── EX Fitting a BD model
 ├── 04.02 SA VPA (T) CO/EJ
 │   └── EX VPA & XSA
+│   └── DIY SC@A (transition)
 └── 04.03 SA SCAA (T) CM/EJ
     └── EX a4a
 

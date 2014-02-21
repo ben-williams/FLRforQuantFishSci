@@ -1,0 +1,148 @@
+\documentclass[a4paper]{article}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage[bottom]{footmisc}
+\geometry{verbose,a4paper,tmargin=4cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+%\SweaveOpts{width=5.5, height=5.5}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\title{JRC FLR Course for Quantitative Fisheries Science \\ 18-22 MARCH 2013 @ Barza, Ispra, Italy \\ Activity report}
+\maketitle
+
+\section{Introduction}
+
+The Maritime Affairs Unit - FISHREG of the European Commission Joint Research Centre (JRC Ispra), Institute for the Protection and Security of the Citizen (IPSC) organized a training course on using FLR FOR QUANTITATIVE FISHERIES ADVICE, which will cover the use and application of the tools developed by the FLR project (http://flr-project.org) to the quantitative analysis of fisheries data and the provision of advice on stock status and forecast.
+
+The FLR library is a collection of tools in the R statistical language that facilitates the construction of bio-economic simulation models of fisheries and ecological sytems. It is a generic toolbox, but is specifically suited for the construction of simulation models for evaluations of fisheries management strategies. The FLR library is under development by researchers across a number of laboratories and universities.
+
+The course will introduce the basic structure of FLR, familiarize users with the available procedures and methods, cover the most important steps of interest to participants in stock assessment working groups, and present the ways in which FLR code can be adapted and extended to your needs.
+
+\section{Programme and Instructors}
+
+\subsection*{Instructors}
+
+\begin{itemize}
+	\item Ernesto Jardim, EC JRC - Maritime Affairs Unit FISHREG (IPSC)
+	\item Colin P. Milar, EC JRC - Maritime Affairs Unit FISHREG (IPSC)
+	\item Iago Mosqueira, EC JRC - Maritime Affairs Unit FISHREG (IPSC)
+	\item Giacomo Chato Osio, EC JRC - Maritime Affairs Unit FISHREG (IPSC)
+	\item Finlay Scott, EC JRC - Maritime Affairs Unit FISHREG (IPSC)
+\end{itemize}
+
+\subsection*{Programme}
+
+\begin{enumerate}
+	\item Introduction to R and FLR
+	\begin{itemize}
+		\item Setting up FLR
+		\item Design, classes and methods
+		\item Basic and complex classes for fisheries data
+	\end{itemize}
+	\item Using FLR	
+	\begin{itemize}
+		\item Creating and combining FLR objects
+		\item Loading and manipulating your own data
+		\item Plotting
+	\end{itemize}
+	\item Fitting models
+	\begin{itemize}
+		\item Non-linear fitting of stock-recruitment model
+		\item Tools for exploring likelihood space
+		\item Forecasting recruitment
+		\item Introducing uncertainty in recruitment
+	\end{itemize}
+	\item Stock assessment using biomass dynamics models
+	\item Stock assessment with age-structured models
+	\begin{itemize}
+		\item Statistical catch-at-age
+		\item Virtual Population Analysis
+	\end{itemize}
+	\item Forecasting stock status
+	\begin{itemize}
+		\item Short and medium term forecasts
+		\item Introducing uncertainty
+	\end{itemize}
+	\item Example case studies
+\end{enumerate}
+
+\section{Participants and Feedback}
+
+The list of participants is presented on the table below.
+
+\begin{table}[H]
+\begin{tabular}{rl}
+\hline 
+Name & Institution \\
+\hline 
+\hline 
+Esther ABAD & Instituto Español de Oceanografía \\
+Isabella BITETTO & COISPA Tecnologia e Ricerca \\
+Igor CELIĆ & ISPRA - STSChioggia - Higher Institute for the Environment \\
+Aymen CHAREF & Joint Research Centre \\
+Francesco COLLOCA & University of Rome "la Sapienza2 \\
+Dimitrios DAMALAS & Joint Research Centre \\
+Marianna GIANNOULAKI & Hellenic Centre for Marine Research \\
+Beatriz GUIJARRO & Instituto Español de Oceanografía \\
+Steven HOLMES & fisheries research services \\
+Angélique JADAUD & IFREMER \\
+Marios JOSEPHIDES & Department of Fisheries and Marine Research \\
+Konstandina KOUTSOUBA & Agricultural University of athens \\
+Mathieu LUNDY & Agri-food and Biosciences Institute \\
+Arina MOTOVA & Joint Research Centre \\
+Matteo MURENU & Università di Cagliari - DBAE \\
+Clare MURRAY &  \\
+Claudia MUSUMECI & CIBM \\
+Nikolaos NIKOLIOUDAKIS & Hellenic Centre for Marine Research \\
+Sofie NIMMEGEERS & Institute for Agricultural and Fisheries Research \\ 
+Alessandro ORIO & Joint Research Centre \\
+Andreas PALIALEXIS & HCMR \\
+Apostolos SIAPATIS & Hellenic Centre for Matine Research \\
+Pedro TORRES & Instituto Español de Oceanografia \\
+Ozge TUTAR & METU Institute of Marine Sciences \\
+Sofie VANDEMAELE & Institute for agricultural and fisheries research \\
+Willy VANHEE & ILVO \\
+Esin YALCIN & Mersin University \\
+Maria YANKOVA & Institute of Oceanology "Fridtjof Nansen" - BAS \\
+\hline 
+\end{tabular}
+\caption{Participants}
+\end{table}
+
+An on-line survey was conducted after the course to evaluate the degree of satisfaction of the students. The results are presented in the table below. The results show a very high degree of satisfaction, which is consistent with the perception we had on the last day. 
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{rccc}
+\hline 
+Question & No & Partially & Yes \\ 
+\hline 
+\hline 
+The course was relevant for my work & • & • & 14 \\ 
+The instructors were clear on their explanations & • & 1 & 9 \\ 
+The time allocated to each lecture was adequate & • & 1 & 10 \\ 
+The material covered in the lectures was sufficient and relevant & • & • & 12 \\ 
+The material was presented in the right order & • & • & 10 \\ 
+I would recommend this course to others & • & • & 10 \\ 
+\hline 
+\end{tabular} 
+\caption{On-line survey results}
+\end{center}
+\end{table} 
+
+
+\section{Final notes}
+
+The R training initiatives being promoted by the FishReg resulted in a series of 3 courses about introduction to R and this final course about FLR training for Fisheries Science.
+
+The relevance of these courses is paramount. There is a increasing requirement for stock assessment experts with the increase demanding of science based advice for fisheries management, and FLR is a major tool on the area. JRC since 2010 has on its FishReg action 3 members of the core development team and 2 experienced users/developers of FLR. As such being a major player in the area development of methods and implementation for further usage in advisory processes.
+
+The promotion of training sessions is extremely important for leveling up the pool of scientists available and at the same time promoting FLR and the open science principles.  
+
+All teaching materials are available on the JRC website [TODO].
+
+\end{document}
