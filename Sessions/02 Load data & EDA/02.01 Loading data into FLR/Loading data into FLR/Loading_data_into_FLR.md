@@ -26,3 +26,15 @@ http://cran.r-project.org/doc/manuals/R-data.html
 * Text files : `scan()`
 * Database : `RODBC` package
 * Direct link to spreadsheets : `excel.link`, `RExcelInstaller` packages
+
+# Loading data is just the start
+
+"Happy families are all alike; every unhappy family is unhappy in its own way."
+
+	Leo Tolstoy
+
+
+
+"Clean datasets are all alike; every messy dataset is messy in its own way."
+
+	Hadley Wickham

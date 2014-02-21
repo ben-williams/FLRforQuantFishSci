@@ -111,20 +111,20 @@ plot(p4brp)
 # also with historical data
 plot(p4brp, obs=TRUE)
 
+
 # ITERATIONS
 
 # We can introduce variability in some quantities
 # and see the effect on estimated RPs
 
 # add some noise on the natural mortality
-m(p4brpi) <- rlnorm(100, m(p4brpi), 0.3)
+p4brpi <- p4brp
+m(p4brpi) <- rlnorm(100, m(p4brp), 0.3)
 
 # calculate reference points
 refpts(p4brpi) <- computeRefpts(p4brpi)
 
 # take a look
 refpts(p4brpi)
-
-plot(p4brpi)
 
 plot(refpts(p4brpi)[1:6, 1:5])
