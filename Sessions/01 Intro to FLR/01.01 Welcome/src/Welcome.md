@@ -1,8 +1,8 @@
-% Training Course **USING FLR FOR QUANTITATIVE FISHERIES ADVICE**
-% FISHREG - European Commission Joint Research Centre
-% March 2013
+% Training Course **Using FLR and a4a for Quantitative Fisheries Advice**
+%
+% August 2014
 
-# Welcome to (almost) the EC JRC, Ispra, Italy.
+# Welcome to the EC JRC, Ispra, Italy.
 
 \centering
 \includegraphics[keepaspectratio, width=0.8\textwidth]{graphics/jrcispra.png}
@@ -17,18 +17,20 @@
 
 ## Lunch
 
-- Don Guanella
+- JRC Mensa
 
 ## Dinner
 
-- Don Guanella
-- Other places
+- Hotel Europa
+- Other places in Ispra
 - Course dinner THU
 
 # MATERIALS
 
-- R 2.15.*
-- RStudio or other text editor
+- R 3.1: <http:cran.r-project.org/>
+- RStudio: <http://rstudio.org/>
+- git: <http://msysgit.github.io/>
+- github account: <http://github.com/>
 
 # INSTALLATION
 
@@ -40,36 +42,35 @@
 
 `install.packages("")`
 
-* `akima`
-* `ggplot2`
+* `copula`
+* `triangle`
+* `mgcv`
+* `splines`
 * `plyr`
+* `ggplot2`
 * `knitr`
-* `RcppArmadillo`
 
 # INSTALLATION: packages
 
-`install.packages(repos="http://flr-project.org/Rdevel")`
+`install.packages(repos="http://flr-project.org/R")`
 
 * `FLCore`
 * `FLEDA`
 * `FLash`
 * `ggplotFL`
 * `FLBRP`
-* `FLAssess`
 * `FLa4a`
-* `FLXSA`
-* `SQLiteFL`
 
 # OUTLINE
 
 1. Introduction to FLR
-2. Load data and EDA
-3. Introduction to modelling: FLSR
-4. Stock assessment
-5. Reference points
-6. Forecasting
-7. Simulation
-8. A Case study
+2. Loading data, plotting and EDA
+3. Non-linear modelling
+4. Stock assessment using a4a (I)
+5. Stock assessment using a4a (II)
+6. Reference points
+7. Short and medium term forecasting for advice
+8. From stock assessment to MSE
 
 # HOW WILL IT RUN
 
@@ -102,13 +103,16 @@ Kell, L. T., Mosqueira, I., Grosjean, P., Fromentin, J-M., Garcia, D., Hillary, 
 
 ## Ernesto Jardim - STECF, MPs, a4a
 
-## Colin Millar - a4a, MPs
-
 ## Iago Mosqueira - FLR, IOTC, MPs
 
-## Chato Osio - MED, STECF
-
 ## Finlay Scott - BioEco, FLR
+
+## Nekane Alzorriz - BioEco, BoB
+
+# READING
+
+- [Using Version Control with RStudio](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN)
+- [Using GitHub with R and RStudio](http://www.molecularecologist.com/2013/11/using-github-with-r-and-rstudio/)
 
 # READY !!
 

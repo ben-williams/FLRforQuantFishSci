@@ -1,4 +1,3 @@
-# FLR and a4a for Quantitative Fisheries Science
 
 # SESSIONS
 
@@ -6,31 +5,9 @@
 
 ### 1.1 Welcome and setup
 
-- Presentation
-- Software installation
-
 ### 1.2 Introduction to FLR
 
-- Presentation
-
 ### 1.3 The FLCore package
-
-- Package installation
-- Presentation
-
-### 1.4 Introducing the FLQuant class
-
-- Presentation
-- Demo
-- Exercise
-
-### 1.5 The FLStock class
-
-- Presentation
-- Demo
-- Exercise
-
-### 1.6 Session 1 Wrap up
 
 ## 2. Loading data, plotting and EDA
 
