@@ -1,10 +1,10 @@
 % The FLCore package of FLR
 %
-% March 2013
+% August 2014
 
 # FLCore in FLR
 \centering
-\includegraphics[keepaspectratio, height=0.5\textheight]{graphics/FLRpkgs.png}
+\includegraphics[keepaspectratio, width=0.95\textwidth]{graphics/flrpkgs.png}
 
 # OOP basics
 
@@ -46,8 +46,7 @@ Lists with all elements being of the same class
 
 # Current status
 
-* Version 2.5.0 in development
-* 2.6 out in May-June
+* Version 2.5.* in development
 * Currently has
   * 12,351 lines of code
 	* Exports 28 classes

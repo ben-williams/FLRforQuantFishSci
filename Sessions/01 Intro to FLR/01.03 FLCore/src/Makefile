@@ -1,5 +1,5 @@
 #
-DOC=Intro_FLR.md
+DOC=FLCore.md
 OUT=../$(DOC).pdf
 
 HEADER=`git rev-parse --show-toplevel`/Template/jrc/header.tex
