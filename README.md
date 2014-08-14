@@ -1,12 +1,14 @@
 # FLR and a4a for Quantitative Fisheries Science
 
+<https://github.com/iagomosqueira/FLRforQuantFishSci>
+
 # SESSIONS
 
 ## 1. Introduction to R and FLR
 
 ### 1.1 Welcome and setup
 
-- [Presentation](./01\ Intro\ to\ FLR/01.01\ Welcome/Welcome.md.pdf)
+- [Presentation](./Sessions/01\ Intro\ to\ FLR/01.01\ Welcome/Welcome.md.pdf)
 
 ### 1.2 Introduction to FLR
 
