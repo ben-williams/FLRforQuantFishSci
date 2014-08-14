@@ -1,6 +1,6 @@
 % The FLR platform for quantitative fisheries science
 % Iago MOSQUEIRA
-% March 2013
+% August 2014
 
 
 # Why, oh why?

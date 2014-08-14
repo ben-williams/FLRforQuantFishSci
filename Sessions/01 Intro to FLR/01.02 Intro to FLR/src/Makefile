@@ -1,13 +1,11 @@
-#
-DOC=Intro_FLR.md
-OUT=../$(DOC).pdf
 
-HEADER=`git rev-parse --show-toplevel`/Template/jrc/header.tex
+PDFS := $(patsubst %.md,../%.md.pdf,$(wildcard *.md))
+TEMPLATE = `git rev-parse --show-toplevel`/Template/jrc/jrc.tex
 
-all: $(OUT)
+all : $(PDFS)
 
-$(OUT): $(DOC)
-	pandoc -t beamer -S -H $(HEADER) $(DOC) -o $(OUT)
+../%.md.pdf : %.md
+	pandoc -t beamer -S --template $(TEMPLATE) $< -o $@
 
-clean:
-	rm -f $(OUT)
+clean :
+	rm $(PDFS)

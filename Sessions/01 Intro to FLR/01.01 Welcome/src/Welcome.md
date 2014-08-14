@@ -1,5 +1,5 @@
-% Training Course **Using FLR and a4a for Quantitative Fisheries Advice**
-%
+% FLR and a4a for Quantitative Fisheries Science
+% FLR Team
 % August 2014
 
 # Welcome to the EC JRC, Ispra, Italy.
