@@ -6,8 +6,7 @@
 
 ### 1.1 Welcome and setup
 
-- Presentation
-- Software installation
+- [Presentation](./01\ Intro\ to\ FLR/01.01\ Welcome/Welcome.md.pdf)
 
 ### 1.2 Introduction to FLR
 
