@@ -1,0 +1,324 @@
+\documentclass{beamer}
+%\usepackage{beamerthemebars}
+
+\include{eu-beamer-template}    % THIS is the line that includes the EU template!
+\usepackage{arev,t1enc}
+ 
+\usepackage[T1]{fontenc}
+\fontfamily{verdana}\selectfont
+
+% for setting spacing in lists
+\makeatletter
+\newcommand{\setlistspacing}[2]{\def\@ld{#1}\expandafter\def\csname
+@list\romannumeral\@ld \endcsname{\leftmargin\csname
+leftmargin\romannumeral\@ld \endcsname
+              \topsep    #2
+              \parsep    0\p@   \@plus\p@
+              \itemsep   #2}}
+\makeatother
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{amsmath,bm,times}
+\newcommand{\mx}[1]{\mathbf{\bm{#1}}} % Matrix command
+\newcommand{\vc}[1]{\mathbf{\bm{#1}}} % Vector command
+
+
+\titleimage{JRC} % pdf or png
+\title{Assessment For All (a4a)}
+\subtitle{The stock assessment model}
+\author[CP Millar]{Ernesto Jardim\\Colin Millar\\Iago Mosqueira\\Chato Osio\\Finlay Scott}
+\institute[JRC]{European Commission\\ Joint Research Centre}
+\date[Stake Holder Seminar 2013]{9-10th September 2013}
+\subject{Fisheries Management}
+
+
+\begin{document}
+
+\section{setup} % load libraries and data, set up knitr
+
+<<knitrsetup, echo=FALSE, eval=TRUE>>=
+opts_chunk$set(tidy       = TRUE, 
+               eval       = TRUE, 
+               warning    = FALSE, 
+               message    = FALSE, 
+               error      = FALSE, 
+               include    = TRUE,
+               fig.width  = 6, 
+               fig.height = 4.5,
+               echo       = FALSE,
+               cache      = FALSE)
+@
+
+<<setup>>=
+  #library(FLa4a)
+  #library(RColorBrewer)
+ 
+  set.seed(1003900)
+
+  #data(ple4)
+  #data(ple4.indices)
+
+  # fit two of the simplest models with a small amount of data
+  # for now we only deal with 1 area, 1 unit.
+  #stock <- ple4[,paste(1993:2008)]
+  #indices <- FLIndices(ple4.indices[[1]][,paste(1993:2008)])
+@ 
+
+
+\section{title} % title page
+
+\setbeamercolor{background canvas}{bg=black}
+\setbeamercolor{normal text}{bg=white,fg=white}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{normal text}{bg=black,fg=black}
+
+\setlistspacing{2}{2ex}
+
+\section{Stock assessment model details}
+
+\newcommand{\E}[1]{\text{E}\left[#1\right]}
+\newcommand{\Var}[1]{\text{Var}\left[#1\right]}
+
+\begin{frame}{Model detail}
+
+\begin{equation*}
+e^{\E{\log C}} = \frac{\color{red}F}{{\color{red}F}+M}\left(1 - e^{-{\color{red}F}-M}\right) {\color{red}R}e^{-\sum {\color{red}F} + M}
+\end{equation*}
+
+and
+
+\begin{equation*}
+e^{\E{\log I}} = {\color{red}Q} {\color{red}R}e^{-\sum {\color{red}F} + M}
+\end{equation*}
+
+and
+
+\begin{equation*}
+\Var{\log C_{ay}} = {\color{red}\sigma^2_{ay}} \qquad \Var{\log I_{ays}} = {\color{red}\tau^2_{ays}}
+\end{equation*}
+
+\end{frame} 
+
+\begin{frame}{Model detail}
+
+linear models for
+\begin{itemize}
+  \item log F
+  \item log Q
+  \item log observation variances
+  \item log initial age structure  
+\end{itemize}
+
+Recruitment is modelled as a \alert{fixed variance} random effect with linear models for
+\begin{itemize}
+  \item log a
+  \item log b
+\end{itemize}
+where relevant.  Models available: Ricker, Beverton Holt, smooth hockeystick, geometric mean
+\end{frame} 
+
+\begin{frame}{Linear models}
+
+It is not always obvious that stock assessments are often composed of linear models.
+
+For example, the classical separable F assumption is simply that
+\begin{align*}
+F_{ay} = S_a \times F_y 
+\end{align*}
+which, in linear modelling parlance is
+\begin{align*}
+\log F \sim \text{age} + \text{year} 
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Intuitive Modelling}
+
+The "language" of linear models has been developing within the statistical community for many years:
+
+  \begin{itemize}
+  \item 1965 J. A. Nelder, notation for randomized block design
+  \item 1973 Wilkinson and Rodgers, symbolic description for factorial designs
+  \item 1990 Hastie and Tibshirani, introduced notation for smoothers
+  \item 1991 Chambers and Hastie, further developed for use in S
+  \end{itemize}
+
+Many modelling software use this language:  Minitab, spss, genstat, SAS, R, S-plus.
+
+\end{frame}
+
+
+\begin{frame}{Some examples}
+A separable model where the level of F is smooth through time
+
+\begin{align*}
+  \log F \sim \text{age} + \text{s(year)}
+\end{align*}
+\end{frame}
+
+
+\begin{frame}{Some examples}
+A separable model where F is smooth over age
+
+\begin{align*}
+  \log F \sim \text{s(age)} + \text{year}
+\end{align*}
+\end{frame}
+
+
+\begin{frame}{Some examples}
+F is smooth over age and year
+
+\begin{align*}
+  \log F \sim \text{s(age, year)}
+\end{align*}
+\end{frame}
+
+\section{Future directions} % A little bit on model selection
+
+% We need layers to draw the block diagram
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+% Define a few styles and constants
+\tikzstyle{model}=[draw, fill=blue!20, text width=5em, text centered, minimum height=2.5em]
+\tikzstyle{modelsels} = [model, text width=6em, fill=red!20, minimum height=12em, rounded corners]
+\def\blockdist{2.3}
+\def\edgedist{2.5}
+
+% The assessment process
+\begin{frame}{An Assessment Process}
+\begin{center}
+\begin{tikzpicture}
+    % draw the blocks
+    \node (modsel) [modelsels] {Model Selection};
+    \path (modsel.140)+(-\blockdist,0) node (mod1) [model] {Model 1};
+    \path (modsel.-150)+(-\blockdist,0) node (mod2) [model] {Model 2};
+    
+    % draw the arrows and text
+    \path [draw, ->] (mod1) -- (modsel.west |- mod1) ;
+    \path [draw, ->] (mod2) -- (modsel.west |- mod2);
+    \node (choices) [below of=mod2] {Scenarios};
+    \path (modsel.south west)+(-0.6,-0.6) node (assess) {Assessment};
+    \draw [->] (modsel.0) -- (\edgedist,0) node[right] {Advice};
+    
+   % draw the box around the models
+    \begin{pgfonlayer}{background}
+        % Compute a few helper coordinates
+        \path (mod1.west |- modsel.north)+(-0.5,0.3) node (a) {};
+        \path (assess.south -| modsel.east)+(+0.3,-0.2) node (b) {};
+        \path[fill=yellow!20,rounded corners, draw=black!50, dashed] (a) rectangle (b);
+        \path (mod1.north west)+(-0.2,0.2) node (a) {};
+        \path (choices.south -| mod1.east)+(+0.2,-0.2) node (b) {};
+        \path[fill=blue!10,rounded corners, draw=black!50, dashed] (a) rectangle (b);
+    \end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Model Averaging can help automation}
+\begin{center}
+\begin{tikzpicture}
+    % draw the blocks
+    \node (modsel) [modelsels] {Model Averaging};
+    \path (modsel.140)+(-\blockdist,0) node (mod1) [model] {Model 1};
+    \path (modsel.-150)+(-\blockdist,0) node (mod2) [model] {Model 2};
+    
+    % draw the arrows and text
+    \path [draw, ->] (mod1) -- (modsel.west |- mod1) ;
+    \path [draw, ->] (mod2) -- (modsel.west |- mod2);
+    \node (choices) [below of=mod2] {Scenarios};
+    \path (choices.south)+(0,-0.6) node (assess) {Assessment};
+    \draw [->] (modsel.0) -- (\edgedist,0) node[right] {Advice};
+    
+   % draw the box around the models
+    \begin{pgfonlayer}{background}
+        % Compute a few helper coordinates
+        \path (mod1.north west)+(-0.5,0.5) node (a) {};
+        \path (assess.south -| choices.east)+(+0.5,-0.2) node (b) {};
+        \path[fill=yellow!20,rounded corners, draw=black!50, dashed] (a) rectangle (b);
+        \path (mod1.north west)+(-0.2,0.2) node (a) {};
+        \path (choices.south -| mod1.east)+(+0.2,-0.2) node (b) {};
+        \path[fill=blue!10,rounded corners, draw=black!50, dashed] (a) rectangle (b);
+    \end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Expert knowledge for model specification}
+
+Different plausible models for different levels
+\begin{itemize}
+\item Management area level (North Sea, Baltic Sea, ...)
+\item Species type (roundfish, flatfish, pelagic, Nephrops)
+\item specific groups (North Sea gadoids)
+\end{itemize}
+
+\vspace{5mm}
+This provides a framework for setting up plausible models for new species.
+
+\vspace{5mm}
+Can lots of simple models averaged = a good model?
+
+\emph{Kearns: Can a set of weak learners create a single strong learner}
+
+\end{frame}
+
+\begin{frame}{}
+
+\begin{center}
+\Large\textbf{Thank you for listening!}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{What we can do, what we can't do}
+
+Can:
+\begin{itemize}
+\item missing values: missing at random
+\item multiple surveys
+\item variable Q, F, variance
+\item splines (fixed degreed of freedom)
+\item stock recruit relationship (fixed variance)
+\item stock recruit relationship (estimated variance) SLOW
+\item \emph{fixed variance random effects: RW1, RW2, seasonal, user specified}
+\end{itemize}
+
+Can't:
+\begin{itemize}
+\item estimate random effect variance
+\item estimate smoothing parameters
+\item estimate growth parameters
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{What we can do}
+
+\begin{itemize}
+\item simulate from the distribution of model params
+\begin{itemize}
+\item normal approx
+\item avoids the need for delta approx
+\item can be biased, but we can also use MCMC if desired
+\end{itemize}
+\item we can approximate the (joint) distribution of
+\begin{itemize}
+\item terminal year Fs and Ns
+\item terminal year Fbar and Fmsy
+\item F / Fmsy
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
