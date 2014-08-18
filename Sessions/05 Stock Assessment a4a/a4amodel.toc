@@ -1,0 +1,5 @@
+\beamer@endinputifotherversion {3.10pt}
+\beamer@sectionintoc {1}{setup}{1}{0}{1}
+\beamer@sectionintoc {2}{title}{1}{0}{2}
+\beamer@sectionintoc {3}{Stock assessment model details}{2}{0}{3}
+\beamer@sectionintoc {4}{Future directions}{15}{0}{4}

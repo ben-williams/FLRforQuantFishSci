@@ -286,8 +286,6 @@ fmodel <- ~ factor(age) + s(year, k=10, by = breakpts(age, c(2:8)))
 fit <- sca(ple4, ple4.indices, fmodel=fmodel)
 wireframe(data ~ age + year, data = as.data.frame(harvest(fit)), drape = TRUE, screen = list(x = -90, y=-45))
 
-
-
 #====================================================================
 # Predict and simulate
 #====================================================================
@@ -388,8 +386,6 @@ stks <- FLStocks(f1=ple4+f1, f2=ple4+f3, ma=ple4+stock.sim)
 flqs <- lapply(stks, ssb)
 flqs <- lapply(flqs, iterMedians)
 xyplot(data~year, groups=qname, data=flqs, type="l")
-
-
 
 #====================================================================
 # Geeky stuff
