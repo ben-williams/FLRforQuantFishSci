@@ -7,5 +7,10 @@ all : $(PDFS)
 ../%.md.pdf : %.md
 	pandoc -t beamer -S --template $(TEMPLATE) $< -o $@
 
+%.md: %.Rmd
+	Rscript -e "library(knitr)" \
+		-e "knit('$*.Rmd')"
+
 clean :
 	rm $(PDFS)
+	rm -rf figure
