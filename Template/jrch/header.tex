@@ -8,6 +8,9 @@
 % packages
 \usepackage[absolute,overlay]{textpos}
 
+\usepackage{datetime}
+\newdateformat{mydate}{\monthname[\THEMONTH] \THEYEAR}
+
 \setlength{\TPHorizModule}{\paperwidth}
 \setlength{\TPVertModule}{\paperheight}
 
@@ -57,9 +60,9 @@
 \begin{textblock}{0.5}[0,0](0.55,0.55)
 {\fontsize{12}{16}\selectfont
 \color{black}
+$author$\\
 Maritime Affairs Unit - IPSC\\
-European Commission\\
-Joint Research Center\\
+EC Joint Research Center\\
 }
 \vfill
 \end{textblock}
@@ -94,7 +97,7 @@ Joint Research Center\\
 
 %% footline {{{
 %% left: date as in title
-\newcommand{\footlinetext}{\insertdate}
+\newcommand{\footlinetext}{\mydate\today}
 \setbeamertemplate{footline}{
 \begin{minipage}{58mm}
 \hspace{7.5mm} \footlinetext
