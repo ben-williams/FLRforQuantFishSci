@@ -1,24 +1,11 @@
-\documentclass{beamer}
-%\usepackage{beamerthemebars}
-
+\documentclass{beamer}% usefull options [handout]
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
 \include{eu-beamer-template}    % THIS is the line that includes the EU template!
 \usepackage{arev,t1enc}
-\usepackage{url}
-\usepackage{hyperref}
- 
 \usepackage[T1]{fontenc}
 \fontfamily{verdana}\selectfont
-
-% for setting spacing in lists
-\makeatletter
-\newcommand{\setlistspacing}[2]{\def\@ld{#1}\expandafter\def\csname
-@list\romannumeral\@ld \endcsname{\leftmargin\csname
-leftmargin\romannumeral\@ld \endcsname
-              \topsep    #2
-              \parsep    0\p@   \@plus\p@
-              \itemsep   #2}}
-\makeatother
-
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \usepackage{amsmath,bm,times}
@@ -26,14 +13,13 @@ leftmargin\romannumeral\@ld \endcsname
 \newcommand{\vc}[1]{\mathbf{\bm{#1}}} % Vector command
 
 
-\titleimage{JRC} % pdf or png
+%\titleimage{JRC} % pdf or png
 \title{Assessment For All (a4a)}
 \subtitle{The stock assessment model}
 \author{The a4a team}
 \institute[JRC]{European Commission\\ Joint Research Centre}
 \date{August 2014}
 \subject{Fisheries Management}
-
 
 \begin{document}
 
@@ -43,41 +29,20 @@ leftmargin\romannumeral\@ld \endcsname
 opts_chunk$set(tidy = TRUE, eval = TRUE, warning = FALSE, message = FALSE, error = FALSE, include = TRUE, fig.width = 6, fig.height = 4.5, echo = FALSE, cache = FALSE)
 @
 
-<<setup, echo=FALSE, message=FALSE, warning=FALSE>>=
-  library(FLa4a)
-  #library(RColorBrewer)
- 
-  set.seed(1003900)
-
-  data(ple4)
-  data(ple4.indices)
-
-  # fit two of the simplest models with a small amount of data
-  # for now we only deal with 1 area, 1 unit.
-  #stock <- ple4[,paste(1993:2008)]
-  #indices <- FLIndices(ple4.indices[[1]][,paste(1993:2008)])
-@ 
-
-
-\section{title} % title page
-
-\setbeamercolor{background canvas}{bg=black}
-\setbeamercolor{normal text}{bg=white,fg=white}
-
-\begin{frame}
+%*******************************************
+\begin{frame}%[plain]
 \titlepage
+	\begin{flushright}
+		\includegraphics[width=0.1\textwidth]{cc.png}
+	\end{flushright}
 \end{frame}
-
-\setbeamercolor{background canvas}{bg=white}
-\setbeamercolor{normal text}{bg=black,fg=black}
-
-\setlistspacing{2}{2ex}
 
 \section{Stock assessment model details}
 
 \newcommand{\E}[1]{\text{E}\left[#1\right]}
 \newcommand{\Var}[1]{\text{Var}\left[#1\right]}
 
+%*******************************************
 \begin{frame}{The a4a stock assessment framework}
 
 The a4a stock assessment framework is a statistical catch-at-age model written in R with ADMB underneath (to find the parameters).
@@ -107,7 +72,7 @@ The submodels form use linear models. This opens the possibility of using the li
 
 \end{frame}
 
-\begin{frame}{linear model example}
+\begin{frame}{linear model examples}
 
 <<echo=TRUE>>=
 rec <- c(rec(ple4))
@@ -118,7 +83,8 @@ scafit <- sca(ple4, ple4.indices, srmodel=~year)
 
 \end{frame}
 
-\begin{frame}{linear model example}
+\begin{frame}{linear model examples}
+
 <<fig.cap='Linear model for recruitment'>>=
 plot(rec~year, type='l')
 lines(predict(rlm)~year, col=2)
@@ -127,11 +93,43 @@ lines(c(stock.n(scafit)[1])~year, col=3)
 
 \end{frame}
 
-\begin{frame}{The a4a stock assessment framework}
+\begin{frame}{linear model examples}
 
-There are two basic types of assessments available in a4a: the management procedure fit and the full assessment fit. The management procedure fit does not compute estimates of covariances and is therefore quicker to execute, while the full assessment fit returns parameter estimates and their covariances at the expense of longer fitting time.
+<<echo=TRUE>>=
+rlm <- lm(rec~factor(year))
+scafit <- sca(ple4, ple4.indices, srmodel=~factor(year))
+@
 
 \end{frame}
+
+\begin{frame}{linear model examples}
+
+<<fig.cap='Linear model for recruitment'>>=
+plot(rec~year, type='l')
+lines(predict(rlm)~year, col=2)
+lines(c(stock.n(scafit)[1])~year, col=3)
+@
+
+\end{frame}
+
+%\begin{frame}{linear model examples}
+%
+%<<echo=TRUE>>=
+%rlm <- lm(rec~year + I(year^2) + I(year^3) + I(year^4))
+%scafit <- sca(ple4, ple4.indices, srmodel=~year + I(year^2) + I(year^3) + I(year^4))
+%@
+%
+%\end{frame}
+%
+%\begin{frame}{linear model examples}
+%
+%<<fig.cap='Linear model for recruitment'>>=
+%plot(rec~year, type='l')
+%lines(predict(rlm)~year, col=2)
+%lines(c(stock.n(scafit)[1])~year, col=3)
+%@
+%
+%\end{frame}
 
 \begin{frame}{Model detail}
 
