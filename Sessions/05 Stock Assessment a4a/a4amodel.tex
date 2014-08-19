@@ -47,27 +47,14 @@
 \definecolor{errorcolor}{rgb}{1, 0, 0}
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
-\usepackage{alltt}
-%\usepackage{beamerthemebars}
-
+\usepackage{alltt}% usefull options [handout]
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
 \include{eu-beamer-template}    % THIS is the line that includes the EU template!
 \usepackage{arev,t1enc}
-\usepackage{url}
-\usepackage{hyperref}
- 
 \usepackage[T1]{fontenc}
 \fontfamily{verdana}\selectfont
-
-% for setting spacing in lists
-\makeatletter
-\newcommand{\setlistspacing}[2]{\def\@ld{#1}\expandafter\def\csname
-@list\romannumeral\@ld \endcsname{\leftmargin\csname
-leftmargin\romannumeral\@ld \endcsname
-              \topsep    #2
-              \parsep    0\p@   \@plus\p@
-              \itemsep   #2}}
-\makeatother
-
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \usepackage{amsmath,bm,times}
@@ -75,7 +62,7 @@ leftmargin\romannumeral\@ld \endcsname
 \newcommand{\vc}[1]{\mathbf{\bm{#1}}} % Vector command
 
 
-\titleimage{JRC} % pdf or png
+%\titleimage{JRC} % pdf or png
 \title{Assessment For All (a4a)}
 \subtitle{The stock assessment model}
 \author{The a4a team}
@@ -84,7 +71,6 @@ leftmargin\romannumeral\@ld \endcsname
 \subject{Fisheries Management}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
-
 \begin{document}
 
 \section{setup} % load libraries and data, set up knitr
@@ -92,29 +78,20 @@ leftmargin\romannumeral\@ld \endcsname
 
 
 
-
-
-
-
-\section{title} % title page
-
-\setbeamercolor{background canvas}{bg=black}
-\setbeamercolor{normal text}{bg=white,fg=white}
-
-\begin{frame}
+%*******************************************
+\begin{frame}%[plain]
 \titlepage
+	\begin{flushright}
+		\includegraphics[width=0.1\textwidth]{cc.png}
+	\end{flushright}
 \end{frame}
-
-\setbeamercolor{background canvas}{bg=white}
-\setbeamercolor{normal text}{bg=black,fg=black}
-
-\setlistspacing{2}{2ex}
 
 \section{Stock assessment model details}
 
 \newcommand{\E}[1]{\text{E}\left[#1\right]}
 \newcommand{\Var}[1]{\text{Var}\left[#1\right]}
 
+%*******************************************
 \begin{frame}{The a4a stock assessment framework}
 
 The a4a stock assessment framework is a statistical catch-at-age model written in R with ADMB underneath (to find the parameters).
@@ -144,7 +121,7 @@ The submodels form use linear models. This opens the possibility of using the li
 
 \end{frame}
 
-\begin{frame}{linear model example}
+\begin{frame}{linear model examples}
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -160,7 +137,8 @@ The submodels form use linear models. This opens the possibility of using the li
 
 \end{frame}
 
-\begin{frame}{linear model example}
+\begin{frame}{linear model examples}
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}[]
 
@@ -173,11 +151,52 @@ The submodels form use linear models. This opens the possibility of using the li
 
 \end{frame}
 
-\begin{frame}{The a4a stock assessment framework}
+\begin{frame}{linear model examples}
 
-There are two basic types of assessments available in a4a: the management procedure fit and the full assessment fit. The management procedure fit does not compute estimates of covariances and is therefore quicker to execute, while the full assessment fit returns parameter estimates and their covariances at the expense of longer fitting time.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{rlm} \hlkwb{<-} \hlkwd{lm}\hlstd{(rec} \hlopt{~} \hlkwd{factor}\hlstd{(year))}
+\hlstd{scafit} \hlkwb{<-} \hlkwd{sca}\hlstd{(ple4, ple4.indices,} \hlkwc{srmodel} \hlstd{=} \hlopt{~}\hlkwd{factor}\hlstd{(year))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
 
 \end{frame}
+
+\begin{frame}{linear model examples}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}[]
+
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-4} \caption[Linear model for recruitment]{Linear model for recruitment\label{fig:unnamed-chunk-4}}
+\end{figure}
+
+
+\end{knitrout}
+
+
+\end{frame}
+
+%\begin{frame}{linear model examples}
+%
+%<<echo=TRUE>>=
+%rlm <- lm(rec~year + I(year^2) + I(year^3) + I(year^4))
+%scafit <- sca(ple4, ple4.indices, srmodel=~year + I(year^2) + I(year^3) + I(year^4))
+%@
+%
+%\end{frame}
+%
+%\begin{frame}{linear model examples}
+%
+%<<fig.cap='Linear model for recruitment'>>=
+%plot(rec~year, type='l')
+%lines(predict(rlm)~year, col=2)
+%lines(c(stock.n(scafit)[1])~year, col=3)
+%@
+%
+%\end{frame}
 
 \begin{frame}{Model detail}
 

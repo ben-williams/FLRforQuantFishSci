@@ -1,13 +1,13 @@
 
 %%% EU logo
 % small version for upper right corner of normal pages
-\pgfdeclareimage[width=12.8cm]{university-logo}{JRC_header}
-\logo{\pgfuseimage{university-logo}}
+\pgfdeclareimage[width=12.8cm]{jrc-logo}{JRC_header}
+\logo{\pgfuseimage{jrc-logo}}
 \pgfdeclareimage[height=5.5mm]{footimage}{JRC_footer}
-\newcommand{\titleimage}[1]{\pgfdeclareimage[width=0.5\textwidth]{title-image}{#1}}
-%\newcommand{\footimage}{\pgfdeclareimage[width=0.5\textwidth]{title-image}{#1}}
+\pgfdeclareimage[width=0.5\textwidth]{title-image}{Bayer}
 \titlegraphic{\pgfuseimage{title-image}}
 %%% end EU logo
+
 
 % NOTE: 1cm = 0.393 in = 28.346 pt;    1 pt = 1/72 in = 0.0352 cm
 \setbeamersize{text margin right=3.5mm, text margin left=7.5mm}  % text margin
@@ -37,9 +37,8 @@
 
 %%% title page
 \setbeamertemplate{title page}{
-
 % set the title
-\parbox[top][2.8cm][c]{\textwidth}{\begin{center} \color{white}\LARGE \textbf{\inserttitle}  \\ \vspace{10pt} \color{black!30}\small \insertsubtitle \end{center}}
+\parbox[top][2.8cm][c]{\textwidth}{\begin{center} \color{drk-blue}\LARGE \textbf{\inserttitle}  \\ \vspace{10pt} \small \insertsubtitle \end{center}}
 
 % title image of the presentation
 \begin{minipage}{0.5\textwidth}
@@ -50,7 +49,7 @@
 % Author info
 \hspace{0.5cm}
 \begin{minipage}{0.4\textwidth}
-{\flushleft \color{white} \textbf{\insertauthor} \\ \vspace{5pt} \insertinstitute }
+{\flushleft \color{drk-blue} \textbf{\insertauthor} \\ \insertinstitute }
 \end{minipage}
 }
 %%% end title page
@@ -70,23 +69,16 @@
 \setbeamercolor*{block body alerted}{bg=black!10}
 \setbeamercolor*{block body example}{bg=black!10}
 
-\setbeamercolor{item}{fg=eu-blue}
+\setbeamercolor{item}{fg=drk-blue}
 %%% end colors
 
 \setbeamertemplate{itemize items}[circle] % if you want a ball
 \setbeamertemplate{itemize subitem}[circle] % if you wnat a circle
-\setbeamertemplate{itemize subsubitem}[cirlce] % if you want a triangle
+\setbeamertemplate{itemize subsubitem}[circle] % if you want a triangle
 
 %%% headline
 \setbeamertemplate{headline}{
-\insertlogo % logo on the right
-%\begin{center}
-%\colorbox{eu-blue}{
-% \begin{minipage}[t]{.8\textwidth} \color{eu-blue} text \vspace{25pt} %\end{minipage}}
-%\begin{minipage}[c]{0.0\textwidth}
-%\hspace{-10mm} hi
-%\end{minipage}
-%\end{center}
+\insertlogo
 }
 %%% end headline
 
@@ -94,7 +86,7 @@
 \newcommand{\footlinetext}{\insertdate}
 \setbeamertemplate{footline}{
 \begin{minipage}{58mm}
- \color{drk-blue} \hspace{7.5mm} \footlinetext
+ \color{drk-blue} \hspace{7.5mm} %European Commission
 \end{minipage}
 \hspace{0.1mm} 
 \begin{minipage}{8.5mm}
@@ -103,10 +95,8 @@
 \hspace{0.1mm}
 \begin{minipage}{50mm}
  \color{drk-blue} 
- %\raisebox{-1pt}{\usebeamertemplate***{navigation symbols}}
- \flushright \insertframenumber
+ \flushright \insertframenumber \,/\,\inserttotalframenumber
 \end{minipage}
-
 }
 %%% end footline
 
