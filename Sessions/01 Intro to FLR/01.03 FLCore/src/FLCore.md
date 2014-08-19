@@ -6,10 +6,10 @@
 \centering
 \includegraphics[keepaspectratio, width=0.95\textwidth]{graphics/flrpkgs.png}
 
-# OOP basics
+# Some OOP basics
 
-* Class: `data.frame`, `vector`, `matrix`
-* Method: `plot`
+* Class: e.g. `data.frame`, `vector`, `matrix`
+* Method: e.g. `summary`, `plot`
 * Signature: `plot(data.frame)` vs. `plot(vector)`
 
 \flushright
@@ -17,7 +17,7 @@
 
 # S4 classes
 
-* Fuller OOP mechanism in R
+* Full OOP mechanism in R
 * Extension of S3
 * Used extensively by FLR
 
@@ -26,6 +26,8 @@
 * FLArray, **FLQuant** & FLCohort
 * **FLPar**
 * FLQuantPoint
+* FLQuantDistr
+* FLQuantJK
 
 # Composite classes
 
@@ -33,7 +35,6 @@
 * **FLSR**
 * **FLIndex**
 * FLBiol
-* FLFleet
 
 # Plural classes
 
@@ -46,9 +47,16 @@ Lists with all elements being of the same class
 
 # Current status
 
-* Version 2.5.* in development
+* Version 2.5.*, always in development
 * Currently has
   * 12,351 lines of code
 	* Exports 28 classes
 	* 289 methods
 	* 7 datasets
+
+# Go for it!
+
+* `install.packages('FLCore', repos='http://flr-project.org/R')`
+* `install_github('FLCore', 'flr')`
+* FLCore pages: <http://flr-project.org/FLCore>
+* FLCore repository: <http://github.com/flr/FLCore>

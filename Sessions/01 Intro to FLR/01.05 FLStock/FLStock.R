@@ -23,11 +23,9 @@ class(ple4)
 
 slotNames(ple4)
 
-
 ggplot(data=catch.n(ple4))+geom_line(aes(year, data, color=factor(age)))
 ggplot(data=catch.wt(ple4))+geom_line(aes(year, data, color=factor(age)))
 ggplot(data=catch(ple4))+geom_line(aes(year, data, color=factor(age)))
-
 
 name(ple4)
 desc(ple4)
@@ -54,7 +52,12 @@ m(ple4) # natural mortality
 m.spwn(ple4) # fraction of the natural mortality ocurring before spawning
 
 # harvest, harvest.spwn
+harvest(ple4)
+harvest.spwn(ple4)
+
 # stock
+stock(ple4)
+stock.n(ple4)
 
 
 # Methods
@@ -64,6 +67,10 @@ m.spwn(ple4) # fraction of the natural mortality ocurring before spawning
 discards(ple4) <- computeDiscards(ple4)
 
 # summary & plot
+summary(ple4)
+
+plot(ple4)
+
 # transform
 
 # window, [, qapply
@@ -77,9 +84,9 @@ range(smallple4)
 plot(smallple4)
 
 # SUBSET
-temp<-ple4[,c("1998", "1999", "2000", "2001")]
+temp <- ple4[,c("1998", "1999", "2000", "2001")]
 # or
-temp<-ple4[,as.character(1998:2001)]
+temp <- ple4[,as.character(1998:2001)]
 
 # many FLQuant methods also available at this level
 summary(propagate(ple4, 10))
@@ -154,8 +161,5 @@ temp<-as.data.frame(ple4)
 summary(temp)
 
 # or only some slots
-as.data.frame(ple4@catch)
-as.data.frame(ple4@catch.n)
-
-
+as.data.frame(FLQuants(catch.n=catch.n(ple4), stock.n=stock.n(ple4)))
 

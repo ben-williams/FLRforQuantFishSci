@@ -65,11 +65,11 @@
 
 1. Introduction to FLR
 2. Loading data, plotting and EDA
-3. Non-linear modelling
-4. Stock assessment using a4a (I)
-5. Stock assessment using a4a (II)
-6. Reference points
-7. Short and medium term forecasting for advice
+3. Stock-recruitment and reference points
+4. Modelling M and growth with a4a
+5. Stock assessment using a4a
+6. Short term forecasting for advice
+7. Forecasting scenarios
 8. From stock assessment to MSE
 
 # HOW WILL IT RUN
