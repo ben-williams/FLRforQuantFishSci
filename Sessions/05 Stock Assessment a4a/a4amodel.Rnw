@@ -40,16 +40,7 @@ leftmargin\romannumeral\@ld \endcsname
 \section{setup} % load libraries and data, set up knitr
 
 <<knitrsetup, echo=FALSE, eval=TRUE>>=
-opts_chunk$set(tidy       = TRUE, 
-               eval       = TRUE, 
-               warning    = FALSE, 
-               message    = FALSE, 
-               error      = FALSE, 
-               include    = TRUE,
-               fig.width  = 6, 
-               fig.height = 4.5,
-               echo       = FALSE,
-               cache      = FALSE)
+opts_chunk$set(tidy = TRUE, eval = TRUE, warning = FALSE, message = FALSE, error = FALSE, include = TRUE, fig.width = 6, fig.height = 4.5, echo = FALSE, cache = FALSE)
 @
 
 <<setup, echo=FALSE, message=FALSE, warning=FALSE>>=
