@@ -1,5 +1,5 @@
 % The FLCore package of FLR
-%
+% FLR Team
 % August 2014
 
 # FLCore in FLR
