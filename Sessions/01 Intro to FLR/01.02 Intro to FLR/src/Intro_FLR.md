@@ -1,4 +1,4 @@
-% The FLR platform for quantitative fisheries science
+% The FLR platform and the a4a initiative
 % Iago MOSQUEIRA
 % August 2014
 
@@ -38,7 +38,7 @@ community of quantitative fishery scientists!"
     - Overhaul of man pages
     - Simplification of package map
 - FLCore version 2.0 - January 2009
-- FLCore version 2.2 - ??
+- FLCore version 2.2 - 2010
 
 # FLR 2.2 - *Swordfish Polka*
 
@@ -59,14 +59,28 @@ community of quantitative fishery scientists!"
 \centering
 \includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr24.png}
 
+# Current
+
+- FLR 2.5.*, in continuous development
+- Changing package map, but
+    - Classes are stable
+    - New methods
+    - Code does not brake
+- Keep track of versions you used: local copies, github or packrat
+
+# FLR 2.6 - *Black Swan*
+
+\centering
+\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/theeraser.jpg}
+
 # FLR development
 
 FLR is a **collaborative development project**, where distinct scientists that constitute *the FLR Core Team* work simultaneously on code, documentation, etc.
 
 - Development is managed through R-Forge
 - Packages on repository
-- Documentation on wiki
-- Funding comes from a number of EU projects (FEMS, COMMIT, EFIMAS, Fisboat, UNCOVER, JRC)
+- Documentation on open website
+- Funding has come from a number of EU projects (FEMS, COMMIT, EFIMAS, Fisboat, UNCOVER, JRC)
 
 # GNU project (http://gnu.org)
 
@@ -84,7 +98,7 @@ FLR is a **collaborative development project**, where distinct scientists that c
 
 # Collaboration and Open Source
 
-"I think the real issue about adoption of open source is that \textbf{nobody can really ever 'design' a complex system}.  That's simply not how things work: people aren't that smart - nobody is.  And what open source allows is to not actually 'design' things, but let them \textbf{evolve}, through lots of different pressures in the market, and having the end result just \textbf{continually improve}"\newline
+> I think the real issue about adoption of open source is that **nobody can really ever 'design' a complex system**.  That's simply not how things work: people aren't that smart - nobody is.  And what open source allows is to not actually 'design' things, but let them **evolve**, through lots of different pressures in the market, and having the end result just **continually improve**
 
 Linus Torvalds
 
@@ -101,13 +115,13 @@ FLR are:
 - **flexibility** - through a design that does not constrain the user to a given paradigm
 - **extendibility** - through the provision of tools that are ready to be personalized and adapted.
 
-# FLR goals
+# FLR goal
 
 To **promote and generalize** the use of **good quality, open source,
 flexible software** in all areas of quantitative fisheries research and
 management advice, with a key focus on Management Strategies Evaluation.
 
-# FLR goals
+# FLR aims
 
 In detail, FLR aims to facilitate and promote research about:
 
@@ -128,12 +142,10 @@ In detail, FLR aims to facilitate and promote research about:
     - Model fleet dynamics (including economics),
     - Simulate and evaluate management procedures and HCRs,
     - More than just stock assessment (VPA, XSA, ICES uptake)
-    - etc....
 - A software platform for quantitative fisheries science
 - A collection of R packages
 - A team of devoted developers
 - A community of active users
-
 
 # R and FLR
 
@@ -173,7 +185,62 @@ Why do we use R?
 # Packages
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/scheme.png}
+\includegraphics[keepaspectratio, width=0.95\textwidth]{graphics/flrpkgs.png}
+
+
+# a4a - Assessment for All
+
+## Long term vision
+
+- Standard methods to apply rapidly to a large number of stocks
+- No strong statistical technical background
+- Using technical knowledge on the fisheries, stocks and ecosystem
+
+## Why
+
+- Demand for abundance and exploitation estimates
+- Large investments in collecting information
+- Scientific advice for fisheries management.
+
+
+# a4a - Sampled species (PT)
+
+\centering
+\includegraphics[keepaspectratio, height=0.6\textheight]{graphics/pt.png}
+
+> **What if we have to assess hundreds of stocks?**
+>	Estimate what you know, simulate what you don't
+
+# a4a Initiative EC JRC
+
+1. Develop a4a SA method
+2. Discussion on *massive* stock assessment
+3. Capacity building (this course)
+
+\centering
+<https://fishreg.jrc.ec.europa.eu/web/a4a>
+
+# a4a SA model
+
+- *Moderate* data stock (Catch, Survey/CPUE, little bio)
+- NL CaA model, R/FLR/ADMB
+- *Simple* syntax
+
+```r
+> fmodel = separable()
+> qmodel = trawl(techcreep=0.03)
+> rmodel = beverton(a=s(NAO))
+```
+
+# a4a MSE
+
+Building an STANDARD MSE
+
+1. OM uncertainty in growth, S/R and selectivity
+2. HCRs based on catch, surveys, assessments
+3. Assessment models of increasing complexity
+4. OE for catch and index
+5. IE in F or catch
 
 # MSE - The Lego block approach
 
@@ -188,11 +255,11 @@ Why do we use R?
 - CCAMLR - Patagonian toothfish, Mackerel icefish
 - GFCM - Deepwater pink shrimp, Hake in GSA 05
 - ICCAT - Bluefin CITES evaluations, Swordfish, Albacore
-- IOTC - Albacore, Skipjack, Bigeye, Yellowfin Tuna
+- IOTC - Albacore
 - NEAFC - Blue Whiting, NOSS Herring
 - NAFO - Greenland Halibut, American Plaice, Placentia Cod
 - EC -  Evaluation of new CFP
-- JRC - a4a Initiative
+- JRC - a4a Initiative, STECF work
 
 # Open All !!
 
@@ -202,28 +269,16 @@ Why do we use R?
 - Reproducible research
 - Open Mind !!
 
-# What’s next ?
+#
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr30.png}
-
-# FLR 2.6
-
-\centering
-\includegraphics[keepaspectratio, width=\textwidth]{graphics/flr26.png}
-
-# FLR 2.6
-
-\centering
-\includegraphics[keepaspectratio, width=\textwidth]{graphics/flr26b.png}
-
+\includegraphics[keepaspectratio, height=0.85\textheight]{graphics/flr30.png}
 
 # More information
 
 - [FLR Project @ http://flr-project.org](http://flr-project.org)
-- [Source code @ http://r-forge.r-project.org/projects/flr/](http://r-forge.r-project.org/projects/flr/)
-- Repositories `install.packages(repos="http://flr-project.org/R")`
-- [Teach Yourself FLR wiki @ http://tyflr.flr-project.org](http://tyflr.flr-project.org)
+- [Source code @ http://github.com/flr/](http://gtihub.com/flr/)
+- `install.packages(repos="http://flr-project.org/R")`
 
 #
 
