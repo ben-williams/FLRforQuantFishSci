@@ -1,5 +1,5 @@
 % The FLR platform and the a4a initiative
-% Iago MOSQUEIRA
+% FLR Team
 % August 2014
 
 
@@ -13,51 +13,20 @@ community of quantitative fishery scientists!"
 
 # A brief history of FLR
 
-- Started by FEMS EU project
-- COMMIT & EFIMAS EU projects provided much of time and sweat
-- Presented to ICES WG Methods 2004
-- FLCore version 1.0 - December 2005
-    - FLQuant with 5 dimensions, no "iter"
-    - Release often, release early. Bugs galore
-- FLCore version 1.4 - 2007
-    - Stable, full of treats an joy
+- Started by FEMS FP5, COMMIT & EFIMAS FP6
+- Beta ICES WG Methods 2004
+- FLCore version 1.0 - 2005
+- FLCore version 1.4 *The Golden Jackal* - 2007
+\hfill\includegraphics[keepaspectratio, height=0.2\textheight]{graphics/WolfGoldenJackal.jpg}
+- FLCore version 2.2 *Swordfish Polka* - 2010
+\hfill\includegraphics[keepaspectratio, height=0.2\textheight]{graphics/flr20.png}
+- FLR 2.4 *The Duke of Prawns* - 2011
+\hfill\includegraphics[keepaspectratio, height=0.2\textheight]{graphics/flr24.png}
 
-# FLR 1.4 - *The Golden Jackal*
-
-\centering
-\includegraphics[keepaspectratio, height=0.7\textheight]{graphics/WolfGoldenJackal.jpg}
-
-# A brief history of FLR (cont.)
-
-- 2007-2009: The Silk Road to version 2
-    - New FLQuant with 6 dimensions: uncertainty in structure
-    - Rewrite of most methods
-    - Extension of methods available
-    - New classes: FLModel
-    - Stronger use of class inheritance
-    - Overhaul of man pages
-    - Simplification of package map
-- FLCore version 2.0 - January 2009
-- FLCore version 2.2 - 2010
-
-# FLR 2.2 - *Swordfish Polka*
+#
 
 \centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr20.png}
-
-# A brief history of FLR (cont. even more)
-
-- 2009-2011: Settling ideas with 2.4
-    - Clean code
-    - Stabilize FLModel/FLSR
-    - Improve documentation and include vignettes
-    - Lots of minor corrections and additions
-    - Redesign website and review ’Teach Yourself FLR’
-
-# FLR 2.4 - *The Duke of Prawns*
-
-\centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/flr24.png}
+\includegraphics[keepaspectratio, height=0.85\textheight]{graphics/flr30.png}
 
 # Current
 
@@ -67,20 +36,15 @@ community of quantitative fishery scientists!"
     - New methods
     - Code does not brake
 - Keep track of versions you used: local copies, github or packrat
-
-# FLR 2.6 - *Black Swan*
-
-\centering
-\includegraphics[keepaspectratio, height=0.8\textheight]{graphics/theeraser.jpg}
+- FLR 2.6 - *Black Swan*
+\hfill\includegraphics[keepaspectratio, height=0.2\textheight]{graphics/theeraser.jpg}
 
 # FLR development
 
-FLR is a **collaborative development project**, where distinct scientists that constitute *the FLR Core Team* work simultaneously on code, documentation, etc.
-
-- Development is managed through R-Forge
-- Packages on repository
-- Documentation on open website
-- Funding has come from a number of EU projects (FEMS, COMMIT, EFIMAS, Fisboat, UNCOVER, JRC)
+- Collaborative development
+- Informal team
+- Indirect funding
+- Open Source
 
 # GNU project (http://gnu.org)
 
@@ -96,15 +60,6 @@ FLR is a **collaborative development project**, where distinct scientists that c
 
 \Huge{free != free beer}
 
-# Collaboration and Open Source
-
-> I think the real issue about adoption of open source is that **nobody can really ever 'design' a complex system**.  That's simply not how things work: people aren't that smart - nobody is.  And what open source allows is to not actually 'design' things, but let them **evolve**, through lots of different pressures in the market, and having the end result just **continually improve**
-
-Linus Torvalds
-
-\flushright
-\includegraphics[keepaspectratio, height=0.3\textheight]{graphics/askmeOA.png}
-
 # Mission statement
 
 The FLR project provides a **platform for quantitative fisheries
@@ -114,24 +69,6 @@ FLR are:
 - **openness** - through community involvement and the open source ethos
 - **flexibility** - through a design that does not constrain the user to a given paradigm
 - **extendibility** - through the provision of tools that are ready to be personalized and adapted.
-
-# FLR goal
-
-To **promote and generalize** the use of **good quality, open source,
-flexible software** in all areas of quantitative fisheries research and
-management advice, with a key focus on Management Strategies Evaluation.
-
-# FLR aims
-
-In detail, FLR aims to facilitate and promote research about:
-
-- Stock assessment and provision of management advice
-- Data and model validation through simulation
-- Risk analysis
-- Capacity development & education
-- Promote collaboration and openness in quantitative fisheries science
-- Support the development of new models and methods
-- Promote the distribution of new models and methods to a wide public.
 
 # Really, what is FLR?
 
@@ -147,46 +84,19 @@ In detail, FLR aims to facilitate and promote research about:
 - A team of devoted developers
 - A community of active users
 
-# R and FLR
-
-Why do we use R?
-
-- Existing platform for statistical modelling
-- Good graphics capabilities
-- Multi-platform
-- Open source
-- Links with compiled languages like Fortran, C / C++ code for speed
-- Easily extendable in the form of ’packages’
-
-<!--# Object oriented programming with S4-->
-
-<!--- A programming language model organized around "objects" rather than "actions"-->
-<!--- Uses R S4 classes-->
-<!--- Everything is an object of a particular class-->
-<!--- Objects have:-->
-<!--    - members (data) and-->
-<!--    - methods (functions associated with it that act on member data)-->
-<!--- Inheritence used to extend and create new classes (FLSR inherits from FLModel)-->
-<!--- Classes can be members of other classes (most FLR classes include FLQuants as members)-->
-
 # Design principles
 
-- Classes to represent different elements of fisheries systems
-- ’physical’ objects (e.g. FLStock class represents a fish stock)
-- ’methodological’ objects (e.g. FLBRP class containing methods to calculate BRP)
-- Link objects to create simulations - Lego blocks (MSE example)
-- Learning curve: trade off between flexibility and simplicity (no black boxes and no handle turning)
-
-<!--# FLR & S4-->
-
-<!--\centering-->
-<!--\includegraphics[keepaspectratio, height=0.8\textheight]{intro2FLR-001}-->
+- OOP - S4
+- Classes: elements in system
+    - `FLStock`, fish stock
+		- `FLBRP` inputs for BRP calc
+- Methods: link objects
+- Mid-steepenes learning curve
 
 # Packages
 
 \centering
 \includegraphics[keepaspectratio, width=0.95\textwidth]{graphics/flrpkgs.png}
-
 
 # a4a - Assessment for All
 
@@ -246,33 +156,6 @@ Building an STANDARD MSE
 
 \centering
 \includegraphics[keepaspectratio, height=0.8\textheight]{graphics/MSE.png}
-
-# Who’s using it ? (2009)
-- ICES - 22+ stocks
-- STECF - Several including MP & HCR studies
-- AFMA - Northern Prawn Fishery
-- CECAF - Istam project
-- CCAMLR - Patagonian toothfish, Mackerel icefish
-- GFCM - Deepwater pink shrimp, Hake in GSA 05
-- ICCAT - Bluefin CITES evaluations, Swordfish, Albacore
-- IOTC - Albacore
-- NEAFC - Blue Whiting, NOSS Herring
-- NAFO - Greenland Halibut, American Plaice, Placentia Cod
-- EC -  Evaluation of new CFP
-- JRC - a4a Initiative, STECF work
-
-# Open All !!
-
-- Open Science
-- Open Data
-- Open Source
-- Reproducible research
-- Open Mind !!
-
-#
-
-\centering
-\includegraphics[keepaspectratio, height=0.85\textheight]{graphics/flr30.png}
 
 # More information
 
