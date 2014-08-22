@@ -26,6 +26,8 @@ Three components:
 
 The `m()` method multiplies components to give m-at-age
 
+These components are `FLModelSim` which we also use for `a4aGr`
+
 # Modelling uncertainty
 
 Uncertainty comes through parameter uncertainty in each model.

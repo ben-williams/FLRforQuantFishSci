@@ -1,5 +1,5 @@
 # Tutorial: Estimating natural mortality with the a4a framework
-# Copyright 2013 FLR Core Development Team
+# Copyright 2014 FLR Core Development Team
 # Distributed under the GPL 2 or later
 
 #-------------------------------------------------------
@@ -17,19 +17,20 @@ showClass("a4aM")
 
 # 3 models:
 # shape - age effect
-# level
+# level - 'average' level
 # trend - time trend
 # These models are of type FLModelSim
 # We need to supply model (formula) and parameters (FLPar)
 
 # Simple example 0.2
-# Make the level model
+# Make a level model
 level1 <- FLModelSim(model = ~a,
                      params = FLPar(a = 0.2))
 level1
 # Note that we have a slot for 'vcov', we'll use this later
 
 # Make the a4aM object passing in only the level model
+# We don't use a shape or trend model (yet...)
 m1 <- a4aM(level=level1)
 
 # What do we have?
@@ -37,11 +38,13 @@ class(m1)
 m1
 # The level model has been set
 # The shape and trend models have the default ~1
+# Remember these models are multiplicative
 level(m1)
 shape(m1)
 trend(m1)
 
-# We use the m method to create an FLQuant of m
+# We use the m() method to create an FLQuant of m
+# The dimensions of the FLQuant are set in the range slot
 # At the moment we no have dimensions specified
 range(m1)
 # Note the use of minmbar - we'll come to this
@@ -51,6 +54,7 @@ m(m1)
 dimnames(m(m1))
 
 # We can set ages and years using the rngage() and rngyear() methods
+# (Or you can set the range slot directly)
 # First some ages
 rngage(m1) <- c(0,5)
 range(m1)
@@ -59,6 +63,13 @@ m(m1)
 rngyear(m1) <- c(2000,2005)
 range(m1)
 m(m1)
+
+# The minmbar and maxmbar values are the age (or length) range
+# over which the mean m is calculated.
+# This is similar to the fbar range
+# The value of mean m is set by the level model
+# In the previous example level was a single model so the mbar range
+# was not important.
 
 #-------------------------------------------------------
 # A more interesting m model
@@ -71,10 +82,14 @@ level2 <- FLModelSim(model=~1.5*k, params=FLPar(k=0.4))
 level2
 
 # And we use an exponential decay model for the shape model
+# i.e. m is high on young ages
 shape2 <- FLModelSim(model=~exp(-age-0.5))
-shape2 <- FLModelSim(model=~exp(-len-0.5))
 shape2
 # Note that the model is a function of age
+# but that age does not feature in the params
+# age (and len) are 'reserved' names
+# If they are used in the model, the values are taken from the
+# FLQuant dimensions to calculate values
 
 # Make the new growth model
 m2 <- a4aM(shape=shape2, level=level2)
@@ -93,6 +108,7 @@ range(m2)
 # The value of m over the mbar range is given by the level model - hence 0.6 at 0.6
 # change it to the whole age range
 rngmbar(m2) <- c(0,5)
+range(m2)
 m(m2)
 # Take the mean over the mbar range
 apply(m(m2),2,mean)
@@ -148,37 +164,25 @@ level4 <- FLModelSim(model=~k^0.66*t^0.57,
                      params = FLPar(k=0.4, t=10),
                      vcov=matrix(c(0.002, 0.01,0.01, 1),
                                  ncol=2))
-
-
-# For trend we use NAO trend but also include variance
-#trend4 <- FLModelSim(model=~1+b*nao, params=FLPar(b=0.5), vcov=matrix(0.02))
-#m4 <- a4aM(shape=shape2, level=level4, trend=trend4)
+# Make the m model
 m4 <- a4aM(shape=shape2, level=level4)
 
 m4
 # Check the number of iterations in the parameters for the level and trend models
 params(level(m4))
-#params(trend(m4))
-# Use mbrnorm to sample from the models
+
+# Use mvrnorm to sample from the models
 m4 <- mvrnorm(1000, m4)
 m4
 params(level(m4))
-#params(trend(m4))
 # Now we have iterations
 
 rngage(m4) <- c(0,5)
 rngyear(m4) <- c(2000,2005)
 # Pass in the nao with the required year range
-#m4flq <- m(m4, nao = window(nao,2000,2005))
 m4flq <- m(m4)
 dim(m4flq)
-bwplot(data ~ quant | year, data=m4flq)
 
-#----------------------------------------
-data(ple4)
-# ignore trend for the time being
-# shape
-# level
-
+plot(m4flq)
 
 
