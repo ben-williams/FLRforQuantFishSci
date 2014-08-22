@@ -1,5 +1,5 @@
 # Tutorial: Introuduction to growth and slicing using the a4a framework
-# Copyright 2013 FLR Core Development Team
+# Copyright 2014 FLR Core Development Team
 # Distributed under the GPL 2 or later
 
 #-------------------------------------------------------
@@ -222,7 +222,6 @@ boxplot(t(predict(vb_cop, t=0:20+0.5)))
 
 # We need some data so we load some that we prepared earlier
 # It's Red Fish (actually output data from a Gadget model)
-setwd("C://Users//scottfi//Documents//GitHub//2014-CEFAS-crse//04-a4aGr")
 load("data/rfLen.rdata")
 # This data includes an object of type FLStockLen
 summary(rfLen.stk)
@@ -237,6 +236,8 @@ catch.n(rfLen.stk)[1:10,1:5,,1,]
 
 # If you have a lot of iterations in your growth model this can take a very long time (sorry, we are working on improving this)
 # For this example we will reduce the number of iterations
+# Make the growth model with 100 iterations and the parameters we made
+# earlier
 vb_small_tri <- mvrtriangle(100, vb_gr, paramMargins=tri_pars)
 # slice using stat='sum'
 cage <- l2a(catch.n(rfLen.stk), vb_small_tri, stat="sum")
@@ -251,14 +252,7 @@ dimnames(cage)
 # Many of the later ages have comparatively small abundances
 # (the age range has to be the same for all dimensions, so if 1 iteration has a very long age structure, all iterations do)
 cage[,1,,1,]
-# To make the object more manageable (and the l2a() method faster) you can set a maximum age.
-# Any observations equal to or older than this age, get grouped together.
-cage20 <- l2a(catch.n(rfLen.stk), vb_small_tri,
-              stat="sum", max_age=20)
-dim(cage20)
-# We have as many iterations as there were in the growth model
-# and the first dimension is now age
-cage20[,1,,1,]
+
 
 # Slicing an FLStockLen
 # An FLStockLen has a range of different slot types: *.n, *.wt, mat etc
@@ -270,8 +264,14 @@ summary(sage)
 plot(sage)
 
 # Same for FLIndex
-iage <- l2a(rfTrawl.idx, vb_small_tri, max_age=10)
+iage <- l2a(rfTrawl.idx, vb_small_tri)
 summary(iage)
+
+# Running l2a() with a growth model which has uncertainty parameters
+# may throw up some interesting results...
+# For example, the age of your minimum length class may be less
+# than 0.
+# This is probably to do with your t0 values.
 
 
 

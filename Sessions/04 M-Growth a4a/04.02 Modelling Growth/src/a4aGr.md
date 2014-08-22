@@ -39,8 +39,13 @@ Result is an a4aGr object with iterations.
 
 Individual FLQuant, FLStockLen, FLIndex
 
-* 'Number' slots (e.g. 'catch.n' are summed
+* 'Number' slots (e.g. 'catch.n') are summed
 * 'Weight' slots (e.g. 'catch.wt') use mean, weighted by numbers
 * Other slots (e.g. 'mat') use mean
 
+# General approach (summary)
+
+* Make an a4aGr object (growth model + parameters)
+* Add uncertainty on the parameters
+* Convert FLQuant/Stock/Index using growth model
 
